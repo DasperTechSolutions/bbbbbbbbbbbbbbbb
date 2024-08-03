@@ -1,0 +1,4002 @@
+backend:
+  name: git-gateway
+  accept_roles:
+    - admin
+    - editor
+  branch: master
+media_folder: theme/assets/images
+public_folder: /assets/images
+collections:
+  - name: pages
+    label: Pages
+    identifier_field: title
+    extension: md
+    create: false
+    delete: false
+    slug: '{{slug}}'
+    editor: &ref_0
+      preview: false
+    folder: cms/pages
+    fields: &ref_1
+      - label: Title
+        name: title
+        widget: string
+      - label: Publish Date
+        name: date
+        widget: datetime
+      - label: Layout
+        widget: hidden
+        name: layout
+        default: '{{slug}}.html'
+      - &ref_2
+        label: Seo
+        name: seo
+        widget: object
+        collapsed: true
+        fields:
+          - label: Title
+            name: title
+            widget: string
+            required: false
+          - label: Description
+            name: description
+            widget: string
+            required: false
+          - label: No index
+            name: noindex
+            widget: boolean
+            default: false
+            required: false
+          - label: Open Graph Title
+            name: og:title
+            widget: string
+            required: false
+          - label: Open Graph Image
+            name: og:image
+            widget: image
+            required: false
+            media_library:
+              config:
+                multiple: false
+          - label: Twitter Title
+            name: twitter:title
+            widget: string
+            default: summary
+            required: false
+          - label: Twitter Card
+            name: twitter:card
+            widget: string
+            default: summary
+            required: false
+          - label: Twitter Site
+            name: twitter:site
+            widget: string
+            required: false
+          - label: Twitter Creator
+            name: twitter:creator
+            widget: string
+            required: false
+          - label: Twitter Image
+            name: twitter:image
+            widget: image
+            required: false
+            media_library:
+              config:
+                multiple: false
+          - label: Additional HTML tags
+            name: additional_tags
+            widget: text
+            required: false
+  - name: pages-template-info
+    label: Pages template-info
+    identifier_field: title
+    extension: md
+    create: false
+    delete: false
+    slug: '{{slug}}'
+    editor: *ref_0
+    folder: cms/pages/template-info
+    fields: *ref_1
+  - name: blog_posts
+    label: Blog Posts
+    folder: cms/blog-posts
+    create: true
+    identifier_field: name
+    extension: md
+    slug: '{{slug}}'
+    fields:
+      - hint: ''
+        name: title
+        label: Name
+        widget: string
+        required: true
+      - hint: ''
+        name: created-on
+        label: Created On
+        widget: datetime
+        required: false
+      - hint: ''
+        name: updated-on
+        label: Updated On
+        widget: datetime
+        required: false
+      - hint: ''
+        name: published-on
+        label: Published On
+        widget: datetime
+        required: false
+      - label: Detaill
+        name: body
+        widget: markdown
+        required: false
+      - hint: Add post category here
+        name: f_caterory
+        label: Caterory
+        widget: string
+        required: false
+      - hint: Add short info here
+        name: f_short-info
+        label: Short Info
+        widget: string
+        required: false
+      - hint: Add thumb image here - Recommended image size is 224x244
+        name: f_thumb-image
+        label: Thumb Image
+        widget: object
+        required: false
+        fields:
+          - hint: ''
+            name: url
+            label: Image
+            widget: image
+            required: false
+            allow_multiple: false
+          - hint: Image Alt
+            name: alt
+            label: alt
+            widget: string
+            required: false
+      - hint: Add main image here - Recommended image size is 636x480
+        name: f_main-image
+        label: Main Image
+        widget: object
+        required: false
+        fields:
+          - hint: ''
+            name: url
+            label: Image
+            widget: image
+            required: false
+            allow_multiple: false
+          - hint: Image Alt
+            name: alt
+            label: alt
+            widget: string
+            required: false
+      - hint: Turn on this switch for featured post
+        name: f_is-featured-post
+        label: Is Featured Post ?
+        widget: boolean
+        required: false
+        default: false
+      - label: Tags
+        widget: hidden
+        name: tags
+        default: blog-posts
+      - label: Layout
+        widget: hidden
+        name: layout
+        default: '[blog-posts].html'
+      - label: Publish Date
+        name: date
+        widget: datetime
+      - *ref_2
+  - name: category
+    label: Categories
+    folder: cms/category
+    create: true
+    identifier_field: name
+    extension: md
+    slug: '{{slug}}'
+    fields:
+      - hint: ''
+        name: title
+        label: Name
+        widget: string
+        required: true
+      - hint: ''
+        name: created-on
+        label: Created On
+        widget: datetime
+        required: false
+      - hint: ''
+        name: updated-on
+        label: Updated On
+        widget: datetime
+        required: false
+      - hint: ''
+        name: published-on
+        label: Published On
+        widget: datetime
+        required: false
+      - hint: Add image here - Recommended image size 244x244
+        name: f_image
+        label: Image
+        widget: object
+        required: false
+        fields:
+          - hint: ''
+            name: url
+            label: Image
+            widget: image
+            required: false
+            allow_multiple: false
+          - hint: Image Alt
+            name: alt
+            label: alt
+            widget: string
+            required: false
+      - label: Tags
+        widget: hidden
+        name: tags
+        default: category
+      - label: Layout
+        widget: hidden
+        name: layout
+        default: '[category].html'
+      - label: Publish Date
+        name: date
+        widget: datetime
+      - *ref_2
+  - name: product
+    label: Products
+    folder: cms/product
+    create: true
+    identifier_field: name
+    extension: md
+    slug: '{{slug}}'
+    fields:
+      - hint: ''
+        name: variation-properties
+        label: Variation Properties
+        widget: list
+        required: false
+        summary: '{{name}}'
+        fields:
+          - hint: ''
+            name: slug
+            label: Slug
+            widget: hidden
+            required: true
+          - hint: ''
+            name: name
+            label: Name
+            widget: string
+            required: true
+          - hint: ''
+            name: values
+            label: Values
+            widget: list
+            required: true
+            summary: '{{name}}'
+            fields:
+              - hint: ''
+                name: slug
+                label: Slug
+                widget: hidden
+                required: true
+              - hint: ''
+                name: name
+                label: Name
+                widget: string
+                required: true
+      - hint: ''
+        name: variations
+        label: Variations
+        widget: list
+        required: true
+        summary: '{{title}}'
+        min: 1
+        fields:
+          - hint: Slug of the variation
+            name: slug
+            label: Slug
+            widget: string
+            required: true
+          - hint: Default variation?
+            name: default
+            label: Default
+            widget: boolean
+            required: true
+          - hint: ''
+            name: variation-properties
+            label: SKU Values
+            widget: prop-values
+            required: false
+          - hint: ''
+            name: title
+            label: Name
+            widget: string
+            required: true
+          - hint: ''
+            name: f_main-image
+            label: Main Image
+            widget: object
+            required: false
+            fields:
+              - hint: ''
+                name: url
+                label: Image
+                widget: image
+                required: false
+                allow_multiple: false
+              - hint: Image Alt
+                name: alt
+                label: alt
+                widget: string
+                required: false
+          - hint: ''
+            name: f_more-images
+            label: More Images
+            widget: list
+            required: false
+            fields:
+              - hint: ''
+                name: url
+                label: Image
+                widget: image
+                required: false
+                allow_multiple: false
+              - hint: Image Alt
+                name: alt
+                label: alt
+                widget: string
+                required: false
+          - hint: ''
+            name: f_price
+            label: Price
+            widget: price
+            required: true
+          - hint: Compare at Price must be higher than price
+            name: f_compare-at-price
+            label: Compare at price
+            widget: price
+            required: false
+          - hint: ''
+            name: f_download-files
+            label: Downloads
+            widget: list
+            required: false
+            fields:
+              - hint: ''
+                name: url
+                label: Image
+                widget: image
+                required: false
+                allow_multiple: false
+              - hint: Image Alt
+                name: alt
+                label: alt
+                widget: string
+                required: false
+          - hint: ''
+            name: f_width
+            label: Width
+            widget: number
+            required: false
+          - hint: ''
+            name: f_length
+            label: Length
+            widget: number
+            required: false
+          - hint: ''
+            name: f_height
+            label: Height
+            widget: number
+            required: false
+          - hint: ''
+            name: f_weight
+            label: Weight
+            widget: number
+            required: false
+          - hint: ''
+            name: f_sku
+            label: SKU
+            widget: string
+            required: false
+      - hint: ''
+        name: title
+        label: Name
+        widget: string
+        required: true
+      - hint: ''
+        name: created-on
+        label: Created On
+        widget: datetime
+        required: false
+      - hint: ''
+        name: updated-on
+        label: Updated On
+        widget: datetime
+        required: false
+      - hint: ''
+        name: published-on
+        label: Published On
+        widget: datetime
+        required: false
+      - label: Overview
+        name: body
+        widget: markdown
+        required: false
+      - hint: Add this product to one or more categories.
+        name: f_category
+        label: Categories
+        widget: relation
+        required: false
+        collection: category
+        value_field: cms/category/{{slug}}.md
+        search_fields:
+          - slug
+          - name
+        display_fields:
+          - title
+        multiple: true
+      - hint: ''
+        name: f_description
+        label: Description
+        widget: string
+        required: false
+      - hint: ''
+        name: f_shippable
+        label: Requires Shipping
+        widget: boolean
+        required: false
+        default: false
+      - hint: ''
+        name: f_ec-product-type
+        label: Product type
+        widget: select
+        required: false
+        options:
+          - label: Physical
+            value: Physical
+          - label: Digital
+            value: Digital
+          - label: Service
+            value: Service
+          - label: Membership
+            value: Membership
+          - label: Advanced
+            value: Advanced
+      - hint: Add materials name here
+        name: f_material
+        label: Materials
+        widget: string
+        required: false
+      - hint: Add shipping information here
+        name: f_shipping-information
+        label: Shipping Information
+        widget: markdown
+        required: false
+      - hint: Turn on this switch for best selling product
+        name: f_is-best-selling-product
+        label: Is Best Selling Product ?
+        widget: boolean
+        required: false
+        default: false
+      - label: Tags
+        widget: hidden
+        name: tags
+        default: product
+      - label: Layout
+        widget: hidden
+        name: layout
+        default: '[product].html'
+      - label: Publish Date
+        name: date
+        widget: datetime
+      - *ref_2
+  - label: Theme Settings
+    name: settings
+    identifier_field: title
+    extension: json
+    create: false
+    delete: false
+    slug: '{{slug}}'
+    editor:
+      preview: false
+    files:
+      - label: General
+        name: site
+        file: cms/_data/settings/site.json
+        fields:
+          - label: Title
+            name: title
+            widget: hidden
+            default: General
+          - hint: Full domain url (needed for a correct sitemap file)
+            name: domain
+            label: Domain
+            widget: string
+            required: false
+          - name: favicon
+            label: Favicon
+            widget: image
+            allow_multiple: false
+            required: false
+          - name: apple_touch_icon
+            label: Apple Touch Icon
+            widget: image
+            allow_multiple: false
+            required: false
+          - name: header_additional_content
+            label: Additional Content Header
+            hint: Content here will be placed before </head> tag
+            widget: text
+            required: false
+          - name: footer_additional_content
+            label: Additional Content Footer
+            hint: Content here will be placed before </body> tag
+            widget: text
+            required: false
+          - name: images_optimization
+            label: Images Optimization
+            widget: object
+            collapsed: false
+            fields:
+              - label: Image Formats
+                name: formats
+                widget: select
+                multiple: true
+                options:
+                  - label: Avif
+                    value: avif
+                  - label: Webp
+                    value: webp
+              - label: Image Dimensions
+                name: dimensions
+                widget: select
+                multiple: true
+                options:
+                  - label: '500'
+                    value: 500
+                  - label: '800'
+                    value: 800
+                  - label: '1080'
+                    value: 1080
+                  - label: '1600'
+                    value: 1600
+                  - label: '2000'
+                    value: 2000
+                  - label: '2600'
+                    value: 2600
+      - label: Colors
+        name: colors
+        file: cms/_data/colors.json
+        fields:
+          - label: Title
+            name: title
+            widget: hidden
+            default: Colors
+      - label: Texts
+        name: texts
+        file: cms/_data/texts.json
+        fields:
+          - label: Title
+            name: title
+            widget: hidden
+            default: Texts
+          - hint: 'Original text: About Us, key: 645efc51'
+            label: Text
+            name: 645efc51
+            widget: string
+          - hint: 'Original text: Concierge, key: 42600393'
+            label: Text
+            name: '42600393'
+            widget: string
+          - hint: 'Original text: Gifts, key: 419cd23'
+            label: Text
+            name: 419cd23
+            widget: string
+          - hint: 'Original text: Shop, key: 274f16'
+            label: Text
+            name: 274f16
+            widget: string
+          - hint: 'Original text: Contact, key: -64104400'
+            label: Text
+            name: '-64104400'
+            widget: string
+          - hint: 'Original text: Cart, key: 1fef40'
+            label: Text
+            name: 1fef40
+            widget: string
+          - hint: 'Original text: Your go to Pet shop, key: -6e188a4f'
+            label: Text
+            name: '-6e188a4f'
+            widget: string
+          - hint: 'Original text: Unbox happiness for, key: -45e108de'
+            label: Text
+            name: '-45e108de'
+            widget: string
+          - hint: 'Original text: your furry , key: -5d06bd1d'
+            label: Text
+            name: '-5d06bd1d'
+            widget: string
+          - hint: 'Original text: pawtners!, key: -6287fee5'
+            label: Text
+            name: '-6287fee5'
+            widget: string
+          - hint: >-
+              Original text: Dive into a world of tail-wagging delights and
+              purr-worthy treasures. Whether you’re a doting dog parent or a
+              feline fanatic, our vibrant selection of treats, toys, and
+              essentials is crafted to bring endless joy to your furry
+              companions., key: 12917012
+            label: Text
+            name: '12917012'
+            widget: text
+          - hint: 'Original text: Collections, key: -2e16328b'
+            label: Text
+            name: '-2e16328b'
+            widget: string
+          - hint: 'Original text: Explore Collection, key: 3d8b5a8b'
+            label: Text
+            name: 3d8b5a8b
+            widget: string
+          - hint: 'Original text: Shop Now, key: -10d26d54'
+            label: Text
+            name: '-10d26d54'
+            widget: string
+          - hint: >-
+              Original text: Purrr-fectly tailored for your Feline babies!!,
+              key: 62a59216
+            label: Text
+            name: 62a59216
+            widget: string
+          - hint: 'Original text: Shop for Cats, key: -7b89edc2'
+            label: Text
+            name: '-7b89edc2'
+            widget: string
+          - hint: >-
+              Original text: Tail-wagging goodness for every Canine!, key:
+              714c356e
+            label: Text
+            name: 714c356e
+            widget: string
+          - hint: 'Original text: Shop for Dogs, key: -7b894668'
+            label: Text
+            name: '-7b894668'
+            widget: string
+          - hint: >-
+              Original text: Welcome to BUDDYBOX, where every pet is treated
+              like royalty., key: -58eb9353
+            label: Text
+            name: '-58eb9353'
+            widget: string
+          - hint: >-
+              Original text: Pawsitively devoted to your pets' happiness and
+              health., key: -797305f
+            label: Text
+            name: '-797305f'
+            widget: string
+          - hint: "Original text: Elevate Your Pet Shopping Experience with BUDDYBOX.\_, key: 6a72adeb"
+            label: Text
+            name: 6a72adeb
+            widget: string
+          - hint: 'Original text: Tail-Wagging Happiness Delivered, key: 41df92e6'
+            label: Text
+            name: 41df92e6
+            widget: string
+          - hint: 'Original text: No items found., key: 3d503d2b'
+            label: Text
+            name: 3d503d2b
+            widget: string
+          - hint: 'Original text: Concierge!, key: 9a06eee'
+            label: Text
+            name: 9a06eee
+            widget: string
+          - hint: >-
+              Original text: Custom design your pet supplies With BuddyBox, key:
+              c15a367
+            label: Text
+            name: c15a367
+            widget: string
+          - hint: >-
+              Original text: Lorem ipsum dolor sit amet, consetetur sadipscing
+              elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore
+              magna aliquyam erat, sed diam voluptua. At vero eos et accusam et
+              justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
+              takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor
+              sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
+              tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
+              voluptua., key: -58dc0d4a
+            label: Text
+            name: '-58dc0d4a'
+            widget: text
+          - hint: 'Original text: Giftbox, key: 64dade7b'
+            label: Text
+            name: 64dade7b
+            widget: string
+          - hint: >-
+              Original text: BuddyBox Giftbox - for every Occasions, key:
+              -2f4bb7c3
+            label: Text
+            name: '-2f4bb7c3'
+            widget: string
+          - hint: >-
+              Original text: Browse stand-alone products From BuddyBox!, key:
+              6852bbf0
+            label: Text
+            name: 6852bbf0
+            widget: string
+          - hint: 'Original text: Featured Products, key: 5c1e4516'
+            label: Text
+            name: 5c1e4516
+            widget: string
+          - hint: 'Original text: No product found., key: -7c9b86a4'
+            label: Text
+            name: '-7c9b86a4'
+            widget: string
+          - hint: 'Original text: Order Tracking, key: 4a3fff89'
+            label: Text
+            name: 4a3fff89
+            widget: string
+          - hint: 'Original text: Track real time your order, key: 7aa0da7'
+            label: Text
+            name: 7aa0da7
+            widget: string
+          - hint: 'Original text: Free Shipping, key: 31c6b4e2'
+            label: Text
+            name: 31c6b4e2
+            widget: string
+          - hint: 'Original text: You will love at great low prices, key: -3ab6db2b'
+            label: Text
+            name: '-3ab6db2b'
+            widget: string
+          - hint: 'Original text: Flexible Payment, key: 663e42b1'
+            label: Text
+            name: 663e42b1
+            widget: string
+          - hint: 'Original text: Pay with Multiple Credit Cards, key: -6958a9d6'
+            label: Text
+            name: '-6958a9d6'
+            widget: string
+          - hint: 'Original text: Fast Delivery, key: 73a45f38'
+            label: Text
+            name: 73a45f38
+            widget: string
+          - hint: 'Original text: Experience the joy of fast shipping, key: -38cdc4a6'
+            label: Text
+            name: '-38cdc4a6'
+            widget: string
+          - hint: 'Original text: Premium Support, key: -2d040d3a'
+            label: Text
+            name: '-2d040d3a'
+            widget: string
+          - hint: 'Original text: Outstanding premium support, key: 42599060'
+            label: Text
+            name: '42599060'
+            widget: string
+          - hint: >-
+              Original text: I recently purchased the Luxury pet Gift Box from
+              BuddyBox and it has Blown me away., key: 5f6aa64b
+            label: Text
+            name: 5f6aa64b
+            widget: string
+          - hint: 'Original text: Spurgen Samson, key: 184d19d'
+            label: Text
+            name: 184d19d
+            widget: string
+          - hint: 'Original text: Browse our Products today!, key: 71fcb7d2'
+            label: Text
+            name: 71fcb7d2
+            widget: string
+          - hint: >-
+              Original text: Lorem ipsum dolor sit amet, consetetur sadipscing
+              elitr, sed diam nonumy eirmod tempor invidunt, key: 703dca62
+            label: Text
+            name: 703dca62
+            widget: text
+          - hint: 'Original text: Go to Shop, key: -4228dd7d'
+            label: Text
+            name: '-4228dd7d'
+            widget: string
+          - hint: 'Original text: Company, key: -64202ba3'
+            label: Text
+            name: '-64202ba3'
+            widget: string
+          - hint: 'Original text: About us, key: 645f0031'
+            label: Text
+            name: 645f0031
+            widget: string
+          - hint: 'Original text: Blogs, key: 3d4d4f1'
+            label: Text
+            name: 3d4d4f1
+            widget: string
+          - hint: 'Original text: Reviews, key: -5b377405'
+            label: Text
+            name: '-5b377405'
+            widget: string
+          - hint: 'Original text: Contact us, key: 7f274abe'
+            label: Text
+            name: 7f274abe
+            widget: string
+          - hint: 'Original text: Connected, key: 54ec12e9'
+            label: Text
+            name: 54ec12e9
+            widget: string
+          - hint: 'Original text: Instagram, key: 792b2792'
+            label: Text
+            name: 792b2792
+            widget: string
+          - hint: 'Original text: Facebook, key: 217bfee6'
+            label: Text
+            name: 217bfee6
+            widget: string
+          - hint: 'Original text: YouTube, key: 280d3723'
+            label: Text
+            name: 280d3723
+            widget: string
+          - hint: 'Original text: Twitter, key: 2c9a4253'
+            label: Text
+            name: 2c9a4253
+            widget: string
+          - hint: 'Original text: Join our mailing list, key: -48d9b2c3'
+            label: Text
+            name: '-48d9b2c3'
+            widget: string
+          - hint: >-
+              Original text: Stay up-to-date with the latest news, and design.,
+              key: -1105a3b
+            label: Text
+            name: '-1105a3b'
+            widget: string
+          - hint: 'Original text: Email Address, key: -2b7010d0'
+            label: Text
+            name: '-2b7010d0'
+            widget: string
+          - hint: >-
+              Original text: I agree to receive promotional emails from Modern
+              Living., key: -1cc74746
+            label: Text
+            name: '-1cc74746'
+            widget: string
+          - hint: >-
+              Original text: Thank you! Your submission has been received!, key:
+              5a0ea5a1
+            label: Text
+            name: 5a0ea5a1
+            widget: string
+          - hint: >-
+              Original text: Oops! Something went wrong while submitting the
+              form., key: -7c112e99
+            label: Text
+            name: '-7c112e99'
+            widget: string
+          - hint: >-
+              Original text: © 2024 BuddyBox. All rights reserved., key:
+              36c40f1c
+            label: Text
+            name: 36c40f1c
+            widget: string
+          - hint: 'Original text: Designed and Developed by , key: -3c19d8c7'
+            label: Text
+            name: '-3c19d8c7'
+            widget: string
+          - hint: 'Original text: Dasper., key: -46c92cd9'
+            label: Text
+            name: '-46c92cd9'
+            widget: string
+          - hint: 'Original text: Description, key: -360d424'
+            label: Text
+            name: '-360d424'
+            widget: string
+          - hint: 'Original text: SKU:, key: 26dedd'
+            label: Text
+            name: 26dedd
+            widget: string
+          - hint: 'Original text: Category:, key: -2b38fd24'
+            label: Text
+            name: '-2b38fd24'
+            widget: string
+          - hint: 'Original text: No category found., key: -396511f1'
+            label: Text
+            name: '-396511f1'
+            widget: string
+          - hint: 'Original text: Material:, key: -5ff4a02d'
+            label: Text
+            name: '-5ff4a02d'
+            widget: string
+          - hint: 'Original text: This product is out of stock., key: 7aaa2dac'
+            label: Text
+            name: 7aaa2dac
+            widget: string
+          - hint: >-
+              Original text: Product is not available in this quantity., key:
+              -1c765d0d
+            label: Text
+            name: '-1c765d0d'
+            widget: string
+          - hint: 'Original text: Product Overview, key: 118dc5ca'
+            label: Text
+            name: 118dc5ca
+            widget: string
+          - hint: 'Original text: Shipping Information, key: -11603a46'
+            label: Text
+            name: '-11603a46'
+            widget: string
+          - hint: 'Original text: Explore, key: 15309273'
+            label: Text
+            name: '15309273'
+            widget: string
+          - hint: 'Original text: Shop similar products, key: 5eff13c3'
+            label: Text
+            name: 5eff13c3
+            widget: string
+          - hint: 'Original text: Categories, key: -3be6ddc4'
+            label: Text
+            name: '-3be6ddc4'
+            widget: string
+          - hint: 'Original text: Pages, key: 494ffa4'
+            label: Text
+            name: 494ffa4
+            widget: string
+          - hint: 'Original text: FAQ''s, key: 3f92ea2'
+            label: Text
+            name: 3f92ea2
+            widget: string
+          - hint: 'Original text: (, key: 28'
+            label: Text
+            name: '28'
+            widget: string
+          - hint: 'Original text: ), key: 29'
+            label: Text
+            name: '29'
+            widget: string
+          - hint: 'Original text: Your Cart, key: -77ee8913'
+            label: Text
+            name: '-77ee8913'
+            widget: string
+          - hint: 'Original text: Subtotal, key: -76f396dc'
+            label: Text
+            name: '-76f396dc'
+            widget: string
+          - hint: 'Original text: Continue to Checkout, key: -7941186e'
+            label: Text
+            name: '-7941186e'
+            widget: string
+          - hint: 'Original text: Previous, key: -4811e0e9'
+            label: Text
+            name: '-4811e0e9'
+            widget: string
+          - hint: 'Original text: Next, key: 24ff13'
+            label: Text
+            name: 24ff13
+            widget: string
+          - hint: 'Original text: Log In, key: -78042c3f'
+            label: Text
+            name: '-78042c3f'
+            widget: string
+          - hint: 'Original text: Email, key: 3ff5b7c'
+            label: Text
+            name: 3ff5b7c
+            widget: string
+          - hint: 'Original text: Password, key: 4c641ebb'
+            label: Text
+            name: 4c641ebb
+            widget: string
+          - hint: 'Original text: Don''t have an account?, key: 7c95c01d'
+            label: Text
+            name: 7c95c01d
+            widget: string
+          - hint: 'Original text: Sign Up, key: -204ff822'
+            label: Text
+            name: '-204ff822'
+            widget: string
+          - hint: >-
+              Original text: We're having trouble logging you in. Please try
+              again, or contact us if you continue to have problems., key:
+              -4ccc12f5
+            label: Text
+            name: '-4ccc12f5'
+            widget: text
+          - hint: 'Original text: Account activated, key: -3d3c5c82'
+            label: Text
+            name: '-3d3c5c82'
+            widget: string
+          - hint: >-
+              Original text: Your account was created successfully. You will be
+              redirected shortly., key: -7498bb4e
+            label: Text
+            name: '-7498bb4e'
+            widget: string
+          - hint: 'Original text: If nothing happens, click here., key: -7bf1dbc9'
+            label: Text
+            name: '-7bf1dbc9'
+            widget: string
+          - hint: 'Original text: Name, key: 24eeab'
+            label: Text
+            name: 24eeab
+            widget: string
+          - hint: >-
+              Original text: By creating an account, I agree to this website's ,
+              key: 4867e34d
+            label: Text
+            name: 4867e34d
+            widget: string
+          - hint: 'Original text: privacy policy, key: 329660ca'
+            label: Text
+            name: 329660ca
+            widget: string
+          - hint: 'Original text:  and , key: 1f0b149'
+            label: Text
+            name: 1f0b149
+            widget: string
+          - hint: 'Original text: terms of service, key: 4f204da5'
+            label: Text
+            name: 4f204da5
+            widget: string
+          - hint: >-
+              Original text: I consent to receive marketing emails., key:
+              -3db302e8
+            label: Text
+            name: '-3db302e8'
+            widget: string
+          - hint: 'Original text: Already have an account?, key: -76cf8d8b'
+            label: Text
+            name: '-76cf8d8b'
+            widget: string
+          - hint: >-
+              Original text: There was an error signing you up. Please try
+              again, or contact us if you continue to have problems., key:
+              -191558ad
+            label: Text
+            name: '-191558ad'
+            widget: text
+          - hint: 'Original text: Verification Required, key: 8449804'
+            label: Text
+            name: '8449804'
+            widget: string
+          - hint: >-
+              Original text: Account verification required. Please check your
+              email to find your unique verification link., key: 66134559
+            label: Text
+            name: '66134559'
+            widget: text
+          - hint: 'Original text: Reset Password, key: 2bfd368c'
+            label: Text
+            name: 2bfd368c
+            widget: string
+          - hint: 'Original text: Password Reset Email Sent, key: 6bfe9c32'
+            label: Text
+            name: 6bfe9c32
+            widget: string
+          - hint: >-
+              Original text: If we found an account associated with that email
+              address, we've sent a link to reset your password., key: -13a89bf
+            label: Text
+            name: '-13a89bf'
+            widget: text
+          - hint: >-
+              Original text: There was an error resetting your password. Please
+              try again, or contact us if you continue to have problems., key:
+              -7c28e64b
+            label: Text
+            name: '-7c28e64b'
+            widget: text
+          - hint: 'Original text: Update Password, key: 69ed5012'
+            label: Text
+            name: 69ed5012
+            widget: string
+          - hint: 'Original text: Password updated, key: -16704faa'
+            label: Text
+            name: '-16704faa'
+            widget: string
+          - hint: >-
+              Original text: Your password was updated successfully. You were
+              automatically logged in and can continue your session., key:
+              5284c470
+            label: Text
+            name: 5284c470
+            widget: text
+          - hint: 'Original text: Go to Homepage, key: -27857705'
+            label: Text
+            name: '-27857705'
+            widget: string
+          - hint: >-
+              Original text: Please enter your new password in the field below.
+              Make sure you are not using your current password., key: -2d35ed29
+            label: Text
+            name: '-2d35ed29'
+            widget: text
+          - hint: 'Original text: New Password, key: 79707d5b'
+            label: Text
+            name: 79707d5b
+            widget: string
+          - hint: >-
+              Original text: There was an error updating your password. Please
+              try again, or contact us if you continue to have problems., key:
+              -2da7dae4
+            label: Text
+            name: '-2da7dae4'
+            widget: text
+          - hint: 'Original text: Access Denied, key: -2624ce29'
+            label: Text
+            name: '-2624ce29'
+            widget: string
+          - hint: >-
+              Original text: A site membership is required to view this page.
+              Please , key: 4617a544
+            label: Text
+            name: 4617a544
+            widget: string
+          - hint: 'Original text: Sign up, key: -204ff442'
+            label: Text
+            name: '-204ff442'
+            widget: string
+          - hint: 'Original text:  or , key: 103a7d'
+            label: Text
+            name: 103a7d
+            widget: string
+          - hint: 'Original text: Log in, key: -7804285f'
+            label: Text
+            name: '-7804285f'
+            widget: string
+          - hint: 'Original text: ., key: 2e'
+            label: Text
+            name: 2e
+            widget: string
+          - hint: 'Original text: User Account, key: -ea2fd28'
+            label: Text
+            name: '-ea2fd28'
+            widget: string
+          - hint: 'Original text: My Account, key: -585ec447'
+            label: Text
+            name: '-585ec447'
+            widget: string
+          - hint: 'Original text: Password settings, key: 4f13dfe8'
+            label: Text
+            name: 4f13dfe8
+            widget: string
+          - hint: 'Original text: Reset password, key: 2822d26c'
+            label: Text
+            name: 2822d26c
+            widget: string
+          - hint: >-
+              Original text: Your account was updated successfully., key:
+              6d17ba0b
+            label: Text
+            name: 6d17ba0b
+            widget: string
+          - hint: >-
+              Original text: There was an error updating your account. Please
+              try again, or contact us if you continue to have problems., key:
+              13527f80
+            label: Text
+            name: 13527f80
+            widget: text
+          - hint: 'Original text: Subscriptions, key: -59ec052a'
+            label: Text
+            name: '-59ec052a'
+            widget: string
+          - hint: 'Original text: No subscriptions, key: 62c2aaf7'
+            label: Text
+            name: 62c2aaf7
+            widget: string
+          - hint: 'Original text: Style Guide, key: -7aba473'
+            label: Text
+            name: '-7aba473'
+            widget: string
+          - hint: 'Original text: Aa, key: 840'
+            label: Text
+            name: '840'
+            widget: string
+          - hint: 'Original text: Main Heading - Switzer, key: -44bfa2a0'
+            label: Text
+            name: '-44bfa2a0'
+            widget: string
+          - hint: 'Original text: Primary Font - Switzer, key: -666bbce'
+            label: Text
+            name: '-666bbce'
+            widget: string
+          - hint: 'Original text: Font Size, key: 1822b132'
+            label: Text
+            name: 1822b132
+            widget: string
+          - hint: 'Original text: Line Height, key: 34a7c2d3'
+            label: Text
+            name: 34a7c2d3
+            widget: string
+          - hint: 'Original text: Heading 1, key: 6af22973'
+            label: Text
+            name: 6af22973
+            widget: string
+          - hint: 'Original text: Switzer / Medium, key: -6ef851d2'
+            label: Text
+            name: '-6ef851d2'
+            widget: string
+          - hint: 'Original text: 48px, key: 18838c'
+            label: Text
+            name: 18838c
+            widget: string
+          - hint: 'Original text: 150%, key: 171319'
+            label: Text
+            name: '171319'
+            widget: string
+          - hint: 'Original text: Heading 2, key: 6af22974'
+            label: Text
+            name: 6af22974
+            widget: string
+          - hint: 'Original text: Switzer / Regular, key: -676327fd'
+            label: Text
+            name: '-676327fd'
+            widget: string
+          - hint: 'Original text: 34px, key: 180029'
+            label: Text
+            name: '180029'
+            widget: string
+          - hint: 'Original text: Heading 3, key: 6af22975'
+            label: Text
+            name: 6af22975
+            widget: string
+          - hint: 'Original text: 28px, key: 179ace'
+            label: Text
+            name: 179ace
+            widget: string
+          - hint: 'Original text: Heading 4, key: 6af22976'
+            label: Text
+            name: 6af22976
+            widget: string
+          - hint: 'Original text: 22px, key: 178448'
+            label: Text
+            name: '178448'
+            widget: string
+          - hint: 'Original text: Heading 5, key: 6af22977'
+            label: Text
+            name: 6af22977
+            widget: string
+          - hint: 'Original text: 18px, key: 17266f'
+            label: Text
+            name: 17266f
+            widget: string
+          - hint: 'Original text: Heading 6, key: 6af22978'
+            label: Text
+            name: 6af22978
+            widget: string
+          - hint: 'Original text: 16px, key: 171eed'
+            label: Text
+            name: 171eed
+            widget: string
+          - hint: 'Original text: Large, key: 45ccb1b'
+            label: Text
+            name: 45ccb1b
+            widget: string
+          - hint: 'Original text: 170%, key: 171a9b'
+            label: Text
+            name: 171a9b
+            widget: string
+          - hint: 'Original text: Default, key: -40b391df'
+            label: Text
+            name: '-40b391df'
+            widget: string
+          - hint: 'Original text: Small, key: 4c4a4e7'
+            label: Text
+            name: 4c4a4e7
+            widget: string
+          - hint: 'Original text: 14px, key: 17176b'
+            label: Text
+            name: 17176b
+            widget: string
+          - hint: 'Original text: Colors, key: 78a3a990'
+            label: Text
+            name: 78a3a990
+            widget: string
+          - hint: 'Original text: Primary, key: 5075a5e2'
+            label: Text
+            name: 5075a5e2
+            widget: string
+          - hint: 'Original text: Title, key: 4d13238'
+            label: Text
+            name: 4d13238
+            widget: string
+          - hint: 'Original text: Body, key: 1fadc2'
+            label: Text
+            name: 1fadc2
+            widget: string
+          - hint: 'Original text: Background, key: 276a314e'
+            label: Text
+            name: 276a314e
+            widget: string
+          - hint: 'Original text: Button, key: 77471352'
+            label: Text
+            name: '77471352'
+            widget: string
+          - hint: 'Original text: Primary Button, key: 1caed350'
+            label: Text
+            name: 1caed350
+            widget: string
+          - hint: 'Original text: Secondary Button, key: -6b1a7c62'
+            label: Text
+            name: '-6b1a7c62'
+            widget: string
+          - hint: 'Original text: Rich Text Format, key: 3898e126'
+            label: Text
+            name: '3898e126'
+            widget: string
+          - hint: >-
+              Original text: Vaseb is an innovative project dedicated to
+              transforming living spaces with stylish, high-quality furniture
+              and home decor. Our mission is to provide modern, functional, and
+              aesthetically pleasing pieces that cater to diverse tastes and
+              preferences. By blending contemporary design with practicality, ,
+              key: -52f6d83c
+            label: Text
+            name: '-52f6d83c'
+            widget: text
+          - hint: 'Original text: Vaseb, key: 4e9b9a5'
+            label: Text
+            name: 4e9b9a5
+            widget: string
+          - hint: >-
+              Original text:  aims to enhance the comfort and beauty of homes
+              everywhere., key: -5d16980
+            label: Text
+            name: '-5d16980'
+            widget: string
+          - hint: 'Original text: ‍, key: 200d'
+            label: Text
+            name: 200d
+            widget: string
+          - hint: >-
+              Original text: Transforming living spaces with modern, and stylish
+              decor solutions, key: -1297c127
+            label: Text
+            name: '-1297c127'
+            widget: string
+          - hint: >-
+              Original text: Nibh libero condimentum duis turpis pretium
+              molestie netus turpis, key: 636d956d
+            label: Text
+            name: 636d956d
+            widget: string
+          - hint: >-
+              Original text: Turpis lacus sed sagittis mollis sitquam ipsum,
+              key: -3d1e555
+            label: Text
+            name: '-3d1e555'
+            widget: string
+          - hint: >-
+              Original text: Feugiat maurisac ultricies cursus sollicitudin
+              acmauris, key: -bef97a1
+            label: Text
+            name: '-bef97a1'
+            widget: string
+          - hint: >-
+              Original text: Arcu rutrum luctus libero elementum quis libero
+              enim utgravida quis, key: 5903f8b8
+            label: Text
+            name: 5903f8b8
+            widget: string
+          - hint: >-
+              Original text: Molestie sem cursus pulvinar euismod pulvinar nisi
+              at nisi consequat integer neque arcu., key: -ad3c6c9
+            label: Text
+            name: '-ad3c6c9'
+            widget: string
+          - hint: >-
+              Original text: Consequat vulputate pellentesque cursus venenatis
+              egestas., key: -3b6cce9c
+            label: Text
+            name: '-3b6cce9c'
+            widget: string
+          - hint: >-
+              Original text: At Vaseb, our mission is to transform living spaces
+              with modern, stylish, and high-quality furniture and home decor.
+              We blend contemporary design with functionality, offering curated
+              collections that cater to diverse tastes and preferences., key:
+              -438782a4
+            label: Text
+            name: '-438782a4'
+            widget: text
+          - hint: >-
+              Original text: Odio augue morbi elementum lectus metus nec
+              phasellus. Donec non auctor tellus nibh elementum nunc elementum.
+              Aenean diam sed tincidunt urna. Vitae magna nam vitae mauris.
+              Pellentesque lacus eget mattis gravida elementum nisi vestibulum.
+              Morbi lectus massa in cras cursus id scelerisque tincidunt., key:
+              -2f94a8e
+            label: Text
+            name: '-2f94a8e'
+            widget: text
+          - hint: >-
+              Original text: Vaseb aims to enhance the comfort and beauty of
+              homes everywhere., key: 426542a5
+            label: Text
+            name: 426542a5
+            widget: string
+          - hint: >-
+              Original text: Sollicitudin feugiat nisl, lorem interdum
+              pellentesque. Massa, scelerisque in placerat rutrum hac
+              scelerisque habitasse. Amet ultricies massa nec, ornare faucibus
+              facilisi quisque leo iaculis. Velit consequat in aliquet
+              ullamcorper tristique pulvinar adipiscing sem. Imperdiet augue
+              cras pretium at lectus congue leo feugiat. Eget sit nunc nullam
+              fringilla ut sem eget quis., key: 6bf44c18
+            label: Text
+            name: 6bf44c18
+            widget: text
+          - hint: >-
+              Original text: Sit vulputate aliquam cras aliquam etnibh congue
+              consequat pellentesque, key: 44fb9aba
+            label: Text
+            name: 44fb9aba
+            widget: string
+          - hint: >-
+              Original text: Vestibulum massa aliquet odio mauris duis amet nsed
+              dapibus porta est amet, key: 13bade5d
+            label: Text
+            name: 13bade5d
+            widget: string
+          - hint: >-
+              Original text: Urna augue arcu duis eget proin sed morbi purus sit
+              nunc sodales aliquam, key: -5858b4bf
+            label: Text
+            name: '-5858b4bf'
+            widget: string
+          - hint: >-
+              Original text: Netus nunc risus interdum feugiat et nunc
+              pellentesque mus., key: ca4b303
+            label: Text
+            name: ca4b303
+            widget: string
+          - hint: >-
+              Original text: Egestas vitae orci mauris a donec convallis
+              volutpat ac., key: 338fafb7
+            label: Text
+            name: 338fafb7
+            widget: string
+          - hint: >-
+              Original text: At Vaseb, we're passionate about helping you create
+              living spaces that reflect your unique style & personality., key:
+              4d4d94bf
+            label: Text
+            name: 4d4d94bf
+            widget: text
+          - hint: >-
+              Original text: Ac amet turpis ornare rhoncus. Sed sed ornare elit
+              ut commodo feugiat commodo faucibus purus. Vitae sapien purus id
+              eget neque nulla posuere pellentesque turpis. Aliquam hac amet
+              rhoncus velit vel vitae. Sed lacinia neque amet quis lectus.
+              Pharetra ut volutpat mauris et turpis volutpat eu nisl. A lectus
+              nisi posuere egestas maecenas nulla., key: -6ebbd4aa
+            label: Text
+            name: '-6ebbd4aa'
+            widget: text
+          - hint: >-
+              Original text: Explore our collection today and discover how we
+              can help you bring your vision for your home to life., key:
+              -458f0cd3
+            label: Text
+            name: '-458f0cd3'
+            widget: text
+          - hint: >-
+              Original text: Lobortis penatibus pharetra penatibus nunc morbi ut
+              pulvinar odio nunc. Blandit non a nec leo quis posuere auctor.
+              Amet nunc cras ut at. Gravida sit tempor dictumst odio eu nec
+              blandit non., key: -37de16f2
+            label: Text
+            name: '-37de16f2'
+            widget: text
+          - hint: 'Original text: Changelog, key: -31d02e8c'
+            label: Text
+            name: '-31d02e8c'
+            widget: string
+          - hint: 'Original text: 1.0, key: bdb3'
+            label: Text
+            name: bdb3
+            widget: string
+          - hint: 'Original text: Release Template, key: -7ccabb4d'
+            label: Text
+            name: '-7ccabb4d'
+            widget: string
+          - hint: >-
+              Original text: Initial Vaseb Webflow HTML website template
+              Release, key: -260d0c7a
+            label: Text
+            name: '-260d0c7a'
+            widget: string
+          - hint: 'Original text: Licensing, key: -38ad4b62'
+            label: Text
+            name: '-38ad4b62'
+            widget: string
+          - hint: 'Original text: Disclaimer, key: -6f68ae45'
+            label: Text
+            name: '-6f68ae45'
+            widget: string
+          - hint: >-
+              Original text: All graphical assets in this template are licensed
+              for personal and commercial use. If you'd like to use a specific
+              asset, please check the license below., key: -28a268c6
+            label: Text
+            name: '-28a268c6'
+            widget: text
+          - hint: >-
+              Original text: All images used in this template are 100% free to
+              use for personal and commercial purposes. You can change all the
+              images within the Webflow designer or editor. Please be careful
+              when using other images from the internet. They can be copyright
+              protected, which can lead to issues with the copyright owner and
+              can even lead to big fines., key: 31b40b7b
+            label: Text
+            name: 31b40b7b
+            widget: text
+          - hint: 'Original text: Fonts, key: 40e8de4'
+            label: Text
+            name: 40e8de4
+            widget: string
+          - hint: 'Original text: Switzer, key: -84be268'
+            label: Text
+            name: '-84be268'
+            widget: string
+          - hint: 'Original text: Images, key: -7d409168'
+            label: Text
+            name: '-7d409168'
+            widget: string
+          - hint: 'Original text: Unsplash, key: 34b8660'
+            label: Text
+            name: 34b8660
+            widget: string
+          - hint: 'Original text: Pexels, key: -71b4f337'
+            label: Text
+            name: '-71b4f337'
+            widget: string
+          - hint: 'Original text: Lummi, key: 465d080'
+            label: Text
+            name: 465d080
+            widget: string
+          - hint: 'Original text: Icons & Graphics, key: 649cee4b'
+            label: Text
+            name: 649cee4b
+            widget: string
+          - hint: 'Original text: Iconoir, key: -3b197561'
+            label: Text
+            name: '-3b197561'
+            widget: string
+          - hint: 'Original text: Terms & Conditions, key: 4f912d2b'
+            label: Text
+            name: 4f912d2b
+            widget: string
+          - hint: 'Original text: A. Termination, key: 1c1e7751'
+            label: Text
+            name: 1c1e7751
+            widget: string
+          - hint: >-
+              Original text: Nulla suspendisse enim sapien sit risus lacus
+              lectus ornare. Integer aenean ipsum tempor phasellus amet nisi
+              mauris. Consequat non diam id laoreet pharetra porta id in. Mauris
+              habitasse lectus sit nulla lacus. Sapien mi nunc nulla id auctor.
+              Lorem volutpat sagittis urna sit. Rhoncus eget eget tellus
+              pulvinar erat risus justo. Tortor tortor tempus imperdiet dolor.,
+              key: 9ce2f10
+            label: Text
+            name: 9ce2f10
+            widget: text
+          - hint: >-
+              Original text: Nam convallis massa tristique nulla sit lobortis.
+              Aliquam urna nibh mi purus. Lacus malesuada venenatis etiam mauris
+              eu quis lectus vestibulum adipiscing. Donec sollicitudin facilisi
+              egestas arcu pellentesque tristique praesent sed. Auctor at quam
+              et velit sit. Donec cras quam lectus pulvinar scelerisque. Lectus
+              interdum feugiat lacus leo facilisi orci in. Molestie nunc
+              ullamcorper montes suscipit ultricies quisque aliquet sagittis
+              elementum. Quam consectetur nisl bibendum imperdiet ut non ut
+              quis. Morbi euismod tincidunt amet cursus ac lectus nibh sit
+              aenean. Euismod porttitor vitae sed cras mi pellentesque., key:
+              49d47942
+            label: Text
+            name: 49d47942
+            widget: text
+          - hint: 'Original text: B. User Accounts, key: -3cfb2859'
+            label: Text
+            name: '-3cfb2859'
+            widget: string
+          - hint: >-
+              Original text: Id leo diam quis et tristique facilisi congue
+              velit. Eleifend ornare ut condimentum lacus. Commodo faucibus
+              aliquet tempor scelerisque malesuada turpis lorem urna purus.
+              Interdum feugiat quam lobortis arcu. Aliquet scelerisque cras
+              consequat accumsan nunc in tempor faucibus. Mattis morbi dui vitae
+              in. A pulvinar pretium sed ultrices aliquet. Lobortis blandit amet
+              et eu elementum eget tellus felis. Vel pellentesque massa diam
+              sit. Habitant vitae semper sed justo fermentum tortor nibh arcu.
+              In blandit elit vitae sodales volutpat nulla. Nisl sed nisi
+              lobortis nam blandit vitae nunc. Sed eu quisque auctor duis
+              ullamcorper., key: 3625b457
+            label: Text
+            name: 3625b457
+            widget: text
+          - hint: 'Original text: C. Usage and Access, key: -6603e8df'
+            label: Text
+            name: '-6603e8df'
+            widget: string
+          - hint: >-
+              Original text: Ornare non etiam dolor feugiat purus vitae cursus
+              enim. Leo pretium enim leo lectus pellentesque nulla et suscipit.
+              Porttitor sagittis elit semper imperdiet. Pellentesque maecenas
+              amet amet est ipsum libero sagittis. Donec vitae nisi elementum
+              bibendum.Praesent id ultrices nisl maecenas duis gravida. Est
+              vitae fames velit fringilla gravida. Leo nulla purus enim ornare
+              adipiscing mauris netus quam. Urna enim ullamcorper tellus
+              mauris., key: -681b67f2
+            label: Text
+            name: '-681b67f2'
+            widget: text
+          - hint: >-
+              Original text: Libero enim est scelerisque porttitor. Purus mi
+              suspendisse nibh erat enim. Quis penatibus viverra a blandit
+              facilisis nunc et tellus viverra. Penatibus id libero molestie
+              mauris sed phasellus arcu egestas nisl. Diam non ipsum varius
+              sodales pharetra. Duis sit vestibulum sapien commodo fames
+              eu.Etiam condimentum fames blandit lobortis leo. Ipsum non
+              imperdiet nibh dictum curabitur nibh. Quam gravida viverra commodo
+              proin integer augue lacus et. Quis habitant cras., key: 4ab93808
+            label: Text
+            name: 4ab93808
+            widget: text
+          - hint: 'Original text: D. Payment and Billing, key: f5c5122'
+            label: Text
+            name: f5c5122
+            widget: string
+          - hint: >-
+              Original text: Nibh massa suspendisse erat urna. Iaculis nisl
+              pellentesque ac etiam quisque. Ut nunc mauris iaculis scelerisque.
+              Mollis ac nunc purus platea sed. Est ultrices convallis accumsan
+              senectus lacus morbi faucibus velit. Id tincidunt mattis a sem
+              elementum eget nec in. Est mauris elit pellentesque fusce a. A
+              ornare sed nulla sem pretium malesuada., key: 20bb45d9
+            label: Text
+            name: 20bb45d9
+            widget: text
+          - hint: >-
+              Original text: Turpis tincidunt consectetur sed neque suscipit. Id
+              ultricies ut faucibus elit. Sed amet vulputate commodo cursus
+              turpis. Dis urna mi faucibus et. Consequat dolor duis id consequat
+              amet neque vitae ipsum. Consectetur turpis sem a fermentum. Lectus
+              nunc dictum faucibus aliquam mattis vulputate. Cursus nisi nec
+              mauris ridiculus dignissim. Sit velit amet eu at. Senectus
+              praesent gravida malesuada sed nec ullamcorper fringilla erat
+              faucibus. Orci mauris ut morbi sem commodo arcu sed. Adipiscing
+              pellentesque tortor mattis suspendisse., key: 63af5934
+            label: Text
+            name: 63af5934
+            widget: text
+          - hint: 'Original text: E. Data Privacy & Security, key: -7058af'
+            label: Text
+            name: '-7058af'
+            widget: string
+          - hint: >-
+              Original text: Dignissim augue dui vulputate phasellus egestas id
+              quis enim laoreet. Mattis viverra scelerisque etiam suspendisse.
+              Nunc accumsan non nulla nisl eu phasellus in. Mauris tincidunt
+              bibendum interdum vulputate sit enim in non. Pellentesque
+              porttitor pharetra vulputate pulvinar euismod. Est varius
+              dignissim bibendum risus ut lacinia aenean. Maecenas at nulla
+              ullamcorper malesuada eu. Faucibus porta quis scelerisque etiam
+              nunc malesuada. Luctus eget phasellus pharetra est. Sed egestas
+              amet id tincidunt aliquet vitae., key: -213e19e2
+            label: Text
+            name: '-213e19e2'
+            widget: text
+          - hint: 'Original text: F. Intellectual Property, key: 4bead29d'
+            label: Text
+            name: 4bead29d
+            widget: string
+          - hint: >-
+              Original text: Consectetur vitae nulla ac risus et pellentesque
+              volutpat enim a. Nulla malesuada turpis odio suspendisse sed ante
+              felis. Congue feugiat ac egestas quis amet duis. Etiam
+              sollicitudin turpis nunc lacus justo. Ut tempor risus duis
+              fringilla vel lectus. Aenean condimentum facilisi turpis at mattis
+              eget. Et lacus mollis eleifend varius tincidunt feugiat id ut
+              imperdiet. Dui vitae ac nullam scelerisque maecenas augue sed.
+              Tincidunt elementum pellentesque quis a magna a senectus enim.
+              Morbi dignissim risus mauris sociis. Sed dolor est a facilisis.,
+              key: 4e53ccb7
+            label: Text
+            name: 4e53ccb7
+            widget: text
+          - hint: 'Original text: G. Cancellation Policy, key: -3d6db5ea'
+            label: Text
+            name: '-3d6db5ea'
+            widget: string
+          - hint: >-
+              Original text: Arcu sollicitudin est arcu sit ornare semper nunc
+              dolor. Ut pharetra risus vestibulum et commodo dictum tellus lorem
+              dui. Enim sed magna egestas non integer posuere in senectus. Nisl
+              netus consequat vulputate enim tristique egestas rutrum.
+              Suspendisse egestas consectetur elementum libero feugiat tortor
+              dignissim dolor. Vulputate morbi interdum convallis sit mauris
+              mattis ultrices tellus. Nisi malesuada bibendum a mi. Sagittis
+              amet diam enim porttitor. Ut eget eget consectetur duis in. Nunc
+              sit velit eget in dui ultrices aenean vel., key: 6b9c691f
+            label: Text
+            name: 6b9c691f
+            widget: text
+          - hint: 'Original text: Return Policy, key: 6114b622'
+            label: Text
+            name: 6114b622
+            widget: string
+          - hint: 'Original text: Introduction, key: 658fac3a'
+            label: Text
+            name: 658fac3a
+            widget: string
+          - hint: >-
+              Original text: Cras auctor nisl non ornare pellentesque orci leo
+              congue et vel pellentesque at amet quisque arcu purus tincidunt in
+              lectus adipiscing phasellus porta sapien adipiscing at enim non
+              mattis condimentum et sit aliquam fames convallis semper pharetra
+              at neque ac dignissim., key: -7b241493
+            label: Text
+            name: '-7b241493'
+            widget: text
+          - hint: 'Original text: Cancellation & Refund, key: -2d7a08d1'
+            label: Text
+            name: '-2d7a08d1'
+            widget: string
+          - hint: >-
+              Original text: A. Cras auctor nisl non ornare pellentesque orci
+              leo congue et vel pellentesque at amet quisque arcu purus
+              tincidunt in lectus adipiscing phasellus, key: -15d106b8
+            label: Text
+            name: '-15d106b8'
+            widget: text
+          - hint: >-
+              Original text: Erat in vitae pretium adipiscing convallis auctor
+              lacus pharetra., key: 5ab64a6b
+            label: Text
+            name: 5ab64a6b
+            widget: string
+          - hint: >-
+              Original text: Orci arcu nisi nisl quisque fermentum vulputate
+              vitae., key: 319b0e60
+            label: Text
+            name: 319b0e60
+            widget: string
+          - hint: >-
+              Original text: Cursus aliquet nunc faucibus mollis sed fusce fames
+              consequat., key: 9451245
+            label: Text
+            name: '9451245'
+            widget: string
+          - hint: >-
+              Original text: B. Pellentesque lacus tellus et lobortis dignissim
+              molestie., key: -230a028a
+            label: Text
+            name: '-230a028a'
+            widget: string
+          - hint: >-
+              Original text: Sit urna elit nunc ut enim lobortis odio., key:
+              -d37e25b
+            label: Text
+            name: '-d37e25b'
+            widget: string
+          - hint: >-
+              Original text: Vel ac eget purus tincidunt quis mauris., key:
+              -6a37754c
+            label: Text
+            name: '-6a37754c'
+            widget: string
+          - hint: >-
+              Original text: Luctus rhoncus posuere ultrices ipsum tristique.,
+              key: -5ab945c
+            label: Text
+            name: '-5ab945c'
+            widget: string
+          - hint: >-
+              Original text: Duis tincidunt pellentesque tellus et tempus mauris
+              neque., key: 785eea6f
+            label: Text
+            name: 785eea6f
+            widget: string
+          - hint: >-
+              Original text: Tellus sit arcu risus dis egestas ut ultrices
+              gravida., key: -517075ca
+            label: Text
+            name: '-517075ca'
+            widget: string
+          - hint: >-
+              Original text: Auctor laoreet imperdiet proin et.er id., key:
+              7cd43942
+            label: Text
+            name: 7cd43942
+            widget: string
+          - hint: >-
+              Original text: C. Orci morbi ut potenti enim morbi sagittis
+              viverra lacus., key: -52dca8b0
+            label: Text
+            name: '-52dca8b0'
+            widget: string
+          - hint: >-
+              Original text: Vitae risus vel et purus nunc adipiscing amet
+              pellentesque sed id imperdiet elit a., key: 2056c35a
+            label: Text
+            name: 2056c35a
+            widget: string
+          - hint: >-
+              Original text: Imperdiet aliquet sit mattis elit sit risus
+              ultricies odio quam at arcu., key: -2dc9ce27
+            label: Text
+            name: '-2dc9ce27'
+            widget: string
+          - hint: >-
+              Original text: Pellentesque nibh fringilla cursus morbi egestas
+              dictum., key: -7ddab494
+            label: Text
+            name: '-7ddab494'
+            widget: string
+          - hint: >-
+              Original text: Feugiat elit nullam turpis bibendum nec et
+              tincidunt tempor praesent malesuada sodales amet et nunc in nibh
+              elit., key: -36518e95
+            label: Text
+            name: '-36518e95'
+            widget: text
+          - hint: 'Original text: Refund Owing to Cancellation, key: 40e3d4da'
+            label: Text
+            name: 40e3d4da
+            widget: string
+          - hint: >-
+              Original text: At senectus velit feugiat tortor est volutpat
+              hendrerit orci. Tortor adipiscing proin orci euismod accumsan
+              cursus felis morbi. Non dignissim sapien nec porttitor tellus.
+              Eget feugiat sed sapien et. Faucibus sollicitudin tortor
+              vestibulum tellus neque in turpis. Massa ipsum felis fermentum
+              tortor mattis fermentum massa. Diam magna pharetra ipsum porta
+              commodo tristique quam. Odio cras sed dis molestie vehicula amet.
+              Non libero tortor tellus viverra viverra nulla amet aliquet.
+              Dignissim aliquet magna vivamus et ac pellentesque. Nulla accumsan
+              turpis vel convallis. Tellus pulvinar diam ultricies sed id sed
+              aenean. Est enim commodo pharetra diam. Convallis leo neque
+              faucibus et convallis vitae rhoncus., key: -30b2b30a
+            label: Text
+            name: '-30b2b30a'
+            widget: text
+          - hint: >-
+              Original text: Odio porttitor eget ligula massa in risus fermentum
+              fermentum enim. Feugiat euismod turpis sit massa sem pellentesque.
+              Dapibus viverra in et vestibulum vulputate adipiscing lobortis
+              rhoncus gravida. Leo quam cursus sit at amet augue ut et ut.
+              Semper leo viverra in neque amet consectetur. Sagittis enim arcu
+              lacus a feugiat in suspendisse. Eget non dui ultrices viverra
+              sociis tortor. Lorem ullamcorper dignissim sed molestie duis
+              cursus. Amet egestas enim ornare elit nascetur lectus porttitor.,
+              key: 2431ffa8
+            label: Text
+            name: 2431ffa8
+            widget: text
+          - hint: 'Original text: Returns & Refunds, key: 59921324'
+            label: Text
+            name: '59921324'
+            widget: string
+          - hint: >-
+              Original text: Ut sem orci vivamus velit elit rutrum eget. Nulla
+              ut malesuada fames amet volutpat eros pellentesque blandit risus.
+              Commodo nullam vel vel consectetur. Pellentesque convallis viverra
+              interdum elit blandit ut tristique pellentesque. Egestas nibh sed
+              laoreet consectetur donec. Ultricies duis proin aliquam eget
+              vivamus cursus. Rhoncus felis senectus vestibulum consectetur ac.
+              Sed neque neque odio morbi. Pulvinar sed ut sed egestas malesuada
+              consequat nec., key: -bec35b8
+            label: Text
+            name: '-bec35b8'
+            widget: text
+          - hint: >-
+              Original text: A vitae malesuada sem feugiat. Nisl dictum
+              vulputate massa tristique tempus. Ultrices porttitor vitae
+              elementum ullamcorper viverra. Porta tincidunt nunc dui felis sit
+              ut tellus risus. Pellentesque morbi adipiscing suspendisse
+              adipiscing vitae arcu blandit egestas volutpat. Risus eget
+              pellentesque amet sed dictum odio., key: 59eb6e62
+            label: Text
+            name: 59eb6e62
+            widget: text
+          - hint: 'Original text: Item Damaged During Shipment, key: 21226f41'
+            label: Text
+            name: 21226f41
+            widget: string
+          - hint: >-
+              Original text: Id lectus dictumst sodales donec sed ullamcorper
+              tellus. Morbi enim in faucibus ultrices cras. Senectus ac fames at
+              nunc neque nisi hendrerit cursus. Purus ultrices ipsum aenean leo
+              pretium accumsan. Est odio mattis risus diam. Amet sit sit tortor
+              neque magna mi tristique non vulputate. Blandit tincidunt pharetra
+              at sollicitudin proin nisl molestie dictumst fermentum. Enim dolor
+              integer justo dignissim consectetur diam elit sed neque. Enim
+              vitae erat pretium praesent cras aliquet nisl senectus adipiscing.
+              Enim sed fames quam ullamcorper eleifend ut phasellus. Fermentum
+              hendrerit aenean habitant justo. Egestas malesuada tortor arcu
+              mauris faucibus facilisi., key: 11bcecb4
+            label: Text
+            name: 11bcecb4
+            widget: text
+          - hint: >-
+              Original text: Sapien eget morbi amet sagittis integer tortor
+              ornare quam. Ullamcorper feugiat eu aliquet sed amet turpis arcu
+              vel integer. Nulla turpis pharetra sit pellentesque euismod sed
+              diam. Pharetra turpis nibh in elit ut. Cras nulla tortor fames
+              risus vitae. Eget ipsum sed ipsum egestas dui nulla lacus ac. Sit
+              amet sociis adipiscing sed nisl. Nisl a tortor arcu dui sit
+              vivamus viverra. Aliquet aliquet etiam rutrum elementum sapien.
+              Lacus aliquam fermentum ut bibendum imperdiet quam quis euismod.,
+              key: -47fbad70
+            label: Text
+            name: '-47fbad70'
+            widget: text
+          - hint: 'Original text: Privacy Policy, key: -3fbde6f6'
+            label: Text
+            name: '-3fbde6f6'
+            widget: string
+          - hint: >-
+              Original text: Quisque a tincidunt adipiscing amet pretium cursus
+              hac. Vitae consequat ullamcorper scelerisque neque aliquet.
+              Tempus, at et tempus metus. Integer auctor proin donec aenean in
+              vitae augue donec. Dolor vulputate sed nisi fermentum, quis nullam
+              suspendisse ullamcorper at. Mi purus quisque sollicitudin
+              scelerisque cras vitae. Etiam nunc, senectus purus facilisi eu.
+              Pretium cras viverra phasellus in. Tellus mattis gravida at proin
+              netus magna elit at nunc. Rutrum montes, gravida diam nibh
+              pellentesque. Est nunc sed quis ipsum blandit non augue amet.
+              Amet, nisi, at tristique condimentum convallis. Tortor viverra
+              viverra risus dui. At feugiat donec nisl diam nisi neque, mattis
+              mattis., key: -3dce4f32
+            label: Text
+            name: '-3dce4f32'
+            widget: text
+          - hint: >-
+              Original text: Ultrices ultrices quam laoreet nec eleifend. Porta
+              mattis mauris sodales tincidunt lectus a. Sed justo morbi eget ac
+              pretium, mi, donec. Ut hendrerit pretium nisi, consectetur.
+              Imperdiet vivamus nunc et, vitae fermentum, a tellus ullamcorper.
+              Hac eu faucibus sit urna quam quis. Porta amet faucibus euismod
+              sed. Nec, at pulvinar et vitae. Vel, egestas sagittis, aliquam,
+              nunc, elementum vulputate enim, interdum. Diam quam scelerisque
+              pharetra, eget tincidunt mattis semper nunc. Faucibus quis
+              fringilla fermentum pellentesque porttitor malesuada viverra
+              neque, sapien. Eu, sagittis diam congue quam sed diam, integer
+              fringilla., key: -383c9ebb
+            label: Text
+            name: '-383c9ebb'
+            widget: text
+          - hint: 'Original text: What information do we collect?, key: 603bd82'
+            label: Text
+            name: 603bd82
+            widget: string
+          - hint: >-
+              Original text: Ultrices ultrices quam laoreet nec eleifend. Porta
+              mattis mauris sodales tincidunt lectus a. Sed justo morbi eget ac
+              pretium, mi, donec. Ut hendrerit pretium nisi, consectetur.
+              Imperdiet vivamus nunc et, vitae fermentum, a tellus ullamcorper.,
+              key: -2a6191c0
+            label: Text
+            name: '-2a6191c0'
+            widget: text
+          - hint: >-
+              Original text: Enim, lacus, sed interdum tellus ullamcorper
+              adipiscing. Aliquam est rhoncus a leo risus sit nulla facilisi.
+              Nulla cursus tortor velit vitae molestie magnis quis. Velit elit
+              augue nulla etiam. Dui dui augue egestas convallis eleifend neque,
+              amet lacus. Condimentum sapien ut neque, sit. Dui pellentesque nec
+              sed at eu sit sodales commodo, euismod. Pretium purus elit mattis
+              duis. Vitae sit nunc amet nunc. Scelerisque morbi malesuada libero
+              at massa ac. Nisi et, et pellentesque at arcu. Congue orci cras
+              mauris mauris sed etiam. Vulputate morbi hac est est ut volutpat.
+              Rhoncus habitant scelerisque vulputate rhoncus. Arcu neque, est,
+              ut mauris pulvinar elementum., key: -5decd796
+            label: Text
+            name: '-5decd796'
+            widget: text
+          - hint: 'Original text: How do we use your information? , key: 14394c26'
+            label: Text
+            name: 14394c26
+            widget: string
+          - hint: >-
+              Original text: How long do we keep your information?, key:
+              -6b6f30a
+            label: Text
+            name: '-6b6f30a'
+            widget: string
+          - hint: >-
+              Original text: Condimentum sapien ut neque, sit. Dui pellentesque
+              nec sed at eu sit sodales commodo, euismod. Pretium purus elit
+              mattis duis. Vitae sit nunc amet nunc. Scelerisque morbi malesuada
+              libero at massa ac. Nisi et, et pellentesque at arcu. Congue orci
+              cras mauris mauris sed etiam. Vulputate morbi hac est est ut
+              volutpat. Rhoncus habitant scelerisque vulputate rhoncus. Arcu
+              neque, est, ut mauris pulvinar elementum., key: -550adaf1
+            label: Text
+            name: '-550adaf1'
+            widget: text
+          - hint: >-
+              Original text: Porttitor sedameta semper egestas egestas miut
+              adipiscing pharetra commodo, key: 2b6f3962
+            label: Text
+            name: 2b6f3962
+            widget: string
+          - hint: >-
+              Original text: Euismod diam pulvinar lectus aliquam nulla arcu
+              porta condimentum rhoncus, key: -5e9d41c8
+            label: Text
+            name: '-5e9d41c8'
+            widget: string
+          - hint: >-
+              Original text: Nulla quismi nullaet libero odioa fames senectus
+              placerat nunc adivsit morbi, key: -711fe26f
+            label: Text
+            name: '-711fe26f'
+            widget: string
+          - hint: >-
+              Original text: Aliquet molestie dignissim lorem cursus
+              pellentesque inut dictumvel adipiscing, key: 3e77a68b
+            label: Text
+            name: 3e77a68b
+            widget: string
+          - hint: >-
+              Original text: Viverra blandit velit platea urna dictumst enim
+              suspendisse. Scelerisque est cras urna maecenas. Risus pulvinar
+              arcu ut at senectus. Sem porta velit turpis pulvinar felis donec
+              pulvinar. Lectus at euismod congue aliquet., key: 309cf09a
+            label: Text
+            name: 309cf09a
+            widget: text
+          - hint: 'Original text: What are your privacy rights?, key: 3c4512cb'
+            label: Text
+            name: 3c4512cb
+            widget: string
+          - hint: >-
+              Original text: Justo, neque ut lacus, tincidunt ligula viverra et
+              nibh elit. Id arcu augue egestas tincidunt aenean ipsum. Eros,
+              turpis dignissim venenatis faucibus mauris. Dolor vitae sed
+              facilisis condimentum gravida. Amet dignissim duis nec purus
+              phasellus fermentum, convallis. Libero ut tincidunt nibh nec, at
+              arcu id. Velit suspendisse eu nibh lacus., key: 5823c43e
+            label: Text
+            name: 5823c43e
+            widget: text
+          - hint: >-
+              Original text: Nulla sodales vitae nunc, nisl elementum duis
+              sapien pellentesque. Ut arcu placerat tellus orci ultricies
+              pretium malesuada risus pretium. Felis fermentum, amet, eu elit
+              leo phasellus porttitor. Mi viverra sed ut maecenas aliquam erat.
+              Sed lorem aenean netus nibh quisque morbi. Et, amet, tellus
+              bibendum quam. Mauris duis elit convallis eu nibh integer viverra
+              pharetra tincidunt. Justo eu scelerisque et justo morbi lectus.
+              Urna nullam sed ultrices amet ornare interdum pulvinar lobortis
+              dui. Lacinia morbi et., key: 318cae40
+            label: Text
+            name: 318cae40
+            widget: text
+          - hint: >-
+              Original text: How do we keep your information safe?, key:
+              -7cb0f961
+            label: Text
+            name: '-7cb0f961'
+            widget: string
+          - hint: 'Original text: Protected Page, key: -11d4bbff'
+            label: Text
+            name: '-11d4bbff'
+            widget: string
+          - hint: >-
+              Original text: If you are the website admin, or have access to
+              this page, please type your password below., key: 57952e47
+            label: Text
+            name: '57952e47'
+            widget: text
+          - hint: >-
+              Original text: Incorrect password. Please try again., key:
+              -f5c4b5f
+            label: Text
+            name: '-f5c4b5f'
+            widget: string
+          - hint: 'Original text: We lost that page..., key: 4f4bd6d0'
+            label: Text
+            name: 4f4bd6d0
+            widget: string
+          - hint: >-
+              Original text: sorry, the page you are looking for doesn’t exit or
+              has been moved., key: 290c2bec
+            label: Text
+            name: 290c2bec
+            widget: string
+          - hint: 'Original text: Back to Home, key: -74c2c295'
+            label: Text
+            name: '-74c2c295'
+            widget: string
+          - hint: 'Original text: Search results, key: 7e85e19e'
+            label: Text
+            name: 7e85e19e
+            widget: string
+          - hint: 'Original text: No matching results., key: -75764c4'
+            label: Text
+            name: '-75764c4'
+            widget: string
+          - hint: 'Original text: Contact Us, key: 7f2746de'
+            label: Text
+            name: 7f2746de
+            widget: string
+          - hint: 'Original text: Get in Touch with BuddyBox!, key: 4d9908f4'
+            label: Text
+            name: 4d9908f4
+            widget: string
+          - hint: 'Original text: First name*, key: -318d5e91'
+            label: Text
+            name: '-318d5e91'
+            widget: string
+          - hint: 'Original text: Last name, key: -1407da4b'
+            label: Text
+            name: '-1407da4b'
+            widget: string
+          - hint: 'Original text: Email address*, key: -466c6d26'
+            label: Text
+            name: '-466c6d26'
+            widget: string
+          - hint: 'Original text: Phone number, key: -1f5cfda5'
+            label: Text
+            name: '-1f5cfda5'
+            widget: string
+          - hint: 'Original text: Write your message here*, key: 2e1b51b5'
+            label: Text
+            name: 2e1b51b5
+            widget: string
+          - hint: 'Original text: I here by agree to the , key: 1a93d870'
+            label: Text
+            name: 1a93d870
+            widget: string
+          - hint: 'Original text:  of BuddyBox. , key: 22528380'
+            label: Text
+            name: '22528380'
+            widget: string
+          - hint: 'Original text: Socials, key: -164c917a'
+            label: Text
+            name: '-164c917a'
+            widget: string
+          - hint: 'Original text: Let’s connect, key: 28850a7f'
+            label: Text
+            name: 28850a7f
+            widget: string
+          - hint: 'Original text: Connect with us!, key: 281c417f'
+            label: Text
+            name: 281c417f
+            widget: string
+          - hint: >-
+              Original text: Lorem ipsum dolor sit amet, consectetur adipiscing
+              elit. Suspendisse varius enim in eros elementum tristique. Duis
+              cursus, mi quis viverra ornare, eros dolor interdum nulla, ut
+              commodo diam libero vitae erat. Aenean faucibus nibh et justo
+              cursus id rutrum lorem imperdiet. Nunc ut sem vitae risus
+              tristique posuere., key: -5286fc08
+            label: Text
+            name: '-5286fc08'
+            widget: text
+          - hint: 'Original text: Whatsapp, key: 772ccdb2'
+            label: Text
+            name: 772ccdb2
+            widget: string
+          - hint: 'Original text: Send a mail!, key: 6347f053'
+            label: Text
+            name: 6347f053
+            widget: string
+          - hint: 'Original text: Compose mail, key: -fc3fc5b'
+            label: Text
+            name: '-fc3fc5b'
+            widget: string
+          - hint: 'Original text: Have Questions?, key: a85a24a'
+            label: Text
+            name: a85a24a
+            widget: string
+          - hint: 'Original text: Frequently Asked Questions, key: -475b7d60'
+            label: Text
+            name: '-475b7d60'
+            widget: string
+          - hint: 'Original text: What payment methods do you accept?, key: 66060b65'
+            label: Text
+            name: 66060b65
+            widget: string
+          - hint: >-
+              Original text: We accept all major credit cards, including Visa,
+              Mastercard, American Express, and Discover. We also offer
+              alternative payment options such as PayPal and Apple Pay for your
+              convenience., key: 6c17c762
+            label: Text
+            name: 6c17c762
+            widget: text
+          - hint: >-
+              Original text: How long will it take to receive my order?, key:
+              -6402c99f
+            label: Text
+            name: '-6402c99f'
+            widget: string
+          - hint: >-
+              Original text: Delivery times vary depending on your location and
+              the items you've ordered. In general, most orders are processed
+              and shipped within 1-2 business days., key: -129fa3f8
+            label: Text
+            name: '-129fa3f8'
+            widget: text
+          - hint: 'Original text: Do you offer international shipping?, key: bd1dd05'
+            label: Text
+            name: bd1dd05
+            widget: string
+          - hint: >-
+              Original text: Yes, we offer international shipping to select
+              countries. Please note that additional shipping fees and customs
+              duties may apply. Contact our customer service team for more
+              information about shipping options., key: 5943422c
+            label: Text
+            name: 5943422c
+            widget: text
+          - hint: 'Original text: What is your return policy?, key: 28a69eb0'
+            label: Text
+            name: 28a69eb0
+            widget: string
+          - hint: >-
+              Original text: We want you to be completely satisfied with your
+              purchase. If for any reason you're not happy with your order, you
+              can return it within 30 days for a full refund or exchange., key:
+              6a59f87e
+            label: Text
+            name: 6a59f87e
+            widget: text
+          - hint: >-
+              Original text: Do you offer assembly services for furniture?, key:
+              2a12d506
+            label: Text
+            name: 2a12d506
+            widget: string
+          - hint: >-
+              Original text: While most of our furniture is designed for easy
+              assembly and comes with detailed instructions, we also offer
+              optional assembly services for an additional fee., key: -3b4d4d24
+            label: Text
+            name: '-3b4d4d24'
+            widget: text
+          - hint: >-
+              Original text: Are your products covered by a warranty?, key:
+              -6e293500
+            label: Text
+            name: '-6e293500'
+            widget: string
+          - hint: >-
+              Original text: Yes, all of our products are covered by a warranty
+              against defects in materials and workmanship. The length and terms
+              of the warranty may vary depending on the product., key: 28b5ca24
+            label: Text
+            name: 28b5ca24
+            widget: text
+          - hint: 'Original text: Testimonials, key: 1590c3d4'
+            label: Text
+            name: 1590c3d4
+            widget: string
+          - hint: 'Original text: Customer Reviews, key: 683d2dd9'
+            label: Text
+            name: 683d2dd9
+            widget: string
+          - hint: >-
+              Original text: I recently purchased the Luxury pet gift Box from
+              BuddyBox and it has, key: -49a772ef
+            label: Text
+            name: '-49a772ef'
+            widget: string
+          - hint: 'Original text: Blown me away., key: 3cc60b3c'
+            label: Text
+            name: 3cc60b3c
+            widget: string
+          - hint: 'Original text: Faiza Basit, key: -229aed2c'
+            label: Text
+            name: '-229aed2c'
+            widget: string
+          - hint: 'Original text: Dubai, UAE, key: 2be11f2c'
+            label: Text
+            name: 2be11f2c
+            widget: string
+          - hint: 'Original text: Ananya Johnny, key: -2e2a53ac'
+            label: Text
+            name: '-2e2a53ac'
+            widget: string
+          - hint: 'Original text: Bangalore, India, key: 331b73c4'
+            label: Text
+            name: 331b73c4
+            widget: string
+          - hint: 'Original text: Davis Joseph, key: -54b57cf4'
+            label: Text
+            name: '-54b57cf4'
+            widget: string
+          - hint: >-
+              Original text: I recently purchased the Luxury pet gift, key:
+              -2af677e9
+            label: Text
+            name: '-2af677e9'
+            widget: string
+          - hint: 'Original text: Box from BuddyBox and it has, key: 6e1519a8'
+            label: Text
+            name: 6e1519a8
+            widget: string
+          - hint: 'Original text: Akshay Job, key: -2cd1c76c'
+            label: Text
+            name: '-2cd1c76c'
+            widget: string
+          - hint: 'Original text: Banaglore, India, key: -35ccd308'
+            label: Text
+            name: '-35ccd308'
+            widget: string
+          - hint: 'Original text: Rohan Thomas, key: 46a1e92c'
+            label: Text
+            name: 46a1e92c
+            widget: string
+          - hint: 'Original text: Ivan Joseph, key: 1207b55'
+            label: Text
+            name: 1207b55
+            widget: string
+          - hint: 'Original text: Thrissur, Kerala, key: -11afb5e6'
+            label: Text
+            name: '-11afb5e6'
+            widget: string
+          - hint: 'Original text: News & Articles, key: -c498b9c'
+            label: Text
+            name: '-c498b9c'
+            widget: string
+          - hint: 'Original text: Read More, key: 318af39f'
+            label: Text
+            name: 318af39f
+            widget: string
+          - hint: 'Original text: No post found., key: 406d20ad'
+            label: Text
+            name: 406d20ad
+            widget: string
+          - hint: 'Original text: Read more, key: 31997f7f'
+            label: Text
+            name: 31997f7f
+            widget: string
+          - hint: 'Original text: Similar Posts, key: -393ab6e2'
+            label: Text
+            name: '-393ab6e2'
+            widget: string
+          - hint: 'Original text: Our Products, key: -7a5fd008'
+            label: Text
+            name: '-7a5fd008'
+            widget: string
+          - hint: 'Original text: Take a look at our products!, key: 346e3aa5'
+            label: Text
+            name: 346e3aa5
+            widget: string
+          - hint: 'Original text: Our Story, key: 4f142e1'
+            label: Text
+            name: 4f142e1
+            widget: string
+          - hint: >-
+              Original text: Easy returns and post-purchase support., key:
+              -7de4034b
+            label: Text
+            name: '-7de4034b'
+            widget: string
+          - hint: >-
+              Original text: Encouragement to explore collections and trends.,
+              key: -a37d19
+            label: Text
+            name: '-a37d19'
+            widget: string
+          - hint: >-
+              Original text: Emphasis on quality and craftsmanship., key:
+              -79077ece
+            label: Text
+            name: '-79077ece'
+            widget: string
+          - hint: 'Original text: What we stand for!, key: 326c3ed8'
+            label: Text
+            name: 326c3ed8
+            widget: string
+          - hint: 'Original text: Our Vision and Mission, key: -4387f681'
+            label: Text
+            name: '-4387f681'
+            widget: string
+          - hint: >-
+              Original text: "Our vision at BUDDYBOX is to redefine the standard
+              of luxury in pet care and gifting. We aspire to be the leading
+              global provider of premium pet concierge services and top-quality
+              pet essentials, setting new benchmarks for excellence and
+              innovation. By delivering exceptional, personalized experiences
+              through our bespoke boxes and curated e-store, we aim to enrich
+              the lives of pets and their families, creating a world where every
+              pet is celebrated and cherished., key: -67751e9e
+            label: Text
+            name: '-67751e9e'
+            widget: text
+          - hint: 'Original text: Our Mission, key: 3dba0078'
+            label: Text
+            name: 3dba0078
+            widget: string
+          - hint: >-
+              Original text: At BUDDYBOX, our mission is to elevate the lives of
+              pets and their families through our luxury concierge and gifting
+              services, and premium e-store offerings. We are dedicated to
+              providing exceptional, personalized care with our bespoke monthly
+              boxes, curated to meet each pet’s unique needs. Our e-store offers
+              a carefully selected range of high-quality treats, chews, and
+              toys, ensuring that every pet enjoys the finest products. By
+              combining luxurious, personalized service with top-tier pet
+              essentials, we aim to enrich the wellbeing of pets, foster joy,
+              and build lasting bonds between pets and their parents., key:
+              -6e180f0b
+            label: Text
+            name: '-6e180f0b'
+            widget: text
+          - hint: 'Original text: Customise your box - from scratch, key: -1bf9813d'
+            label: Text
+            name: '-1bf9813d'
+            widget: string
+          - hint: 'Original text: Customize, key: -287f53dd'
+            label: Text
+            name: '-287f53dd'
+            widget: string
+          - hint: 'Original text: Lets design your box!, key: 3bc008e9'
+            label: Text
+            name: 3bc008e9
+            widget: string
+          - hint: 'Original text:  of Vaseb. , key: 93a24ee'
+            label: Text
+            name: 93a24ee
+            widget: string
+          - hint: >-
+              Original text: Celebrate your Pup’s special moments with a
+              customized GiftBox from BUDDYBOX!, key: -4a4a8fac
+            label: Text
+            name: '-4a4a8fac'
+            widget: string
+          - hint: >-
+              Original text: Surprise the pets you adore with a special GiftBox
+              from BUDDYBOX. Whether it's your Furbaby’s birthday or another
+              memorable occasion, our customized giftboxes are a heartfelt way
+              to show your love. Choose from our ready-made standard or premium
+              options, or let us help you curate the perfect gift box tailored
+              to your pet’s preferences. Ideal for pet birthday parties, special
+              events, or any cherished moment, these gift boxes are sure to
+              delight your beloved companion. Each item in our GiftBox is
+              carefully selected to ensure it meets the highest standards of
+              quality and nutrition. From gourmet treats to luxurious
+              accessories, we offer only the best for your babies., key:
+              -50ce4f90
+            label: Text
+            name: '-50ce4f90'
+            widget: text
+          - hint: 'Original text: Dog Products, key: 347a0808'
+            label: Text
+            name: 347a0808
+            widget: string
+          - hint: 'Original text: You might like, key: -9ee8fbf'
+            label: Text
+            name: '-9ee8fbf'
+            widget: string
+          - hint: >-
+              Original text: Celebrate your Kitty’s special moments with a
+              customized GiftBox from BUDDYBOX!, key: -51990b7c
+            label: Text
+            name: '-51990b7c'
+            widget: string
+          - hint: >-
+              Original text: Surprise the pets you adore with a special GiftBox
+              from BUDDYBOX. Whether it's your Furball’s birthday or another
+              memorable occasion, our customized gift boxes are a heartfelt way
+              to show your love. Choose from our ready-made standard or premium
+              options, or let us help you curate the perfect gift box tailored
+              to your pet’s preferences. Ideal for pet birthday parties, special
+              events, or any cherished moment, these gift boxes are sure to
+              delight your beloved cat. Each item in our collection is carefully
+              selected to ensure it meets the highest standards of quality and
+              nutrition. From gourmet treats to luxurious accessories, we offer
+              only the best for your babies., key: 6de9b492
+            label: Text
+            name: 6de9b492
+            widget: text
+          - hint: 'Original text: Cat Products, key: 70015aae'
+            label: Text
+            name: 70015aae
+            widget: string
+          - hint: 'Original text: Shop Gifts, key: -2651f867'
+            label: Text
+            name: '-2651f867'
+            widget: string
+          - hint: 'Original text: Our Gitboxes, key: b0725bb'
+            label: Text
+            name: b0725bb
+            widget: string
+          - hint: >-
+              Original text: Brighton Décor is an excellent choice for anyone
+              who wants to transform their living space into a comfortable
+              home., key: -5e2279dc
+            label: Text
+            name: '-5e2279dc'
+            widget: text
+          - hint: 'Original text: Albert Flores, key: 619ef947'
+            label: Text
+            name: 619ef947
+            widget: string
+          - hint: >-
+              Original text: I recently purchased the Modern Luxe Sofa from
+              Modern Living, and it has completely transformed my living room.,
+              key: 316521f8
+            label: Text
+            name: 316521f8
+            widget: text
+          - hint: 'Original text: Devon Lane, key: -e43bde8'
+            label: Text
+            name: '-e43bde8'
+            widget: string
+          - hint: >-
+              Original text: If you're looking for a company that can help you
+              turn your house into a home, look no further than this company.,
+              key: 57e59da7
+            label: Text
+            name: 57e59da7
+            widget: text
+          - hint: 'Original text: Bessie Cooper, key: 7ecb5bb'
+            label: Text
+            name: 7ecb5bb
+            widget: string
+          - hint: >-
+              Original text: I purchased the Eco-Friendly Bamboo Dining Table,
+              and I'm very happy with it. it's a great addition to my dining
+              room., key: -58e64e24
+            label: Text
+            name: '-58e64e24'
+            widget: text
+          - hint: 'Original text: Courtney Henry, key: -8034c11'
+            label: Text
+            name: '-8034c11'
+            widget: string
+          - hint: >-
+              Original text: I bought the Smart Coffee Table with wireless
+              charging, and it has been a fantastic addition to my home office.,
+              key: 354a02ef
+            label: Text
+            name: 354a02ef
+            widget: text
+          - hint: 'Original text: Jenny Wilson, key: -acfa986'
+            label: Text
+            name: '-acfa986'
+            widget: string
+          - hint: >-
+              Original text: I recently bought the Ergonomic Office Chair from
+              Vaseb, and it's been a game-changer for my home office., key:
+              -65cc8048
+            label: Text
+            name: '-65cc8048'
+            widget: text
+          - hint: 'Original text: Ralph Edwards, key: 2c44adad'
+            label: Text
+            name: 2c44adad
+            widget: string
+          - hint: >-
+              Original text: I can rearrange the shelves and compartments to fit
+              all my books and decorative items. It’s sturdy and stylish., key:
+              538d4092
+            label: Text
+            name: 538d4092
+            widget: text
+          - hint: 'Original text: Savannah Nguyen, key: ce114c6'
+            label: Text
+            name: ce114c6
+            widget: string
+          - hint: 'Original text: Testimonial, key: 5b88cc7f'
+            label: Text
+            name: 5b88cc7f
+            widget: string
+          - hint: 'Original text: Related, key: -5bc7cbf5'
+            label: Text
+            name: '-5bc7cbf5'
+            widget: string
+      - label: Links
+        name: links
+        file: cms/_data/links.json
+        fields:
+          - label: Title
+            name: title
+            widget: hidden
+            default: Links
+          - hint: 'Original link: /about-us/, key: -766f6c3e'
+            label: Link
+            name: '-766f6c3e'
+            widget: string
+          - hint: 'Original link: /concierge/, key: -17349bb5'
+            label: Link
+            name: '-17349bb5'
+            widget: string
+          - hint: 'Original link: /giftbox/, key: 6b36ee23'
+            label: Link
+            name: 6b36ee23
+            widget: string
+          - hint: 'Original link: /, key: 2f'
+            label: Link
+            name: 2f
+            widget: string
+          - hint: 'Original link: /products/, key: -6535e004'
+            label: Link
+            name: '-6535e004'
+            widget: string
+          - hint: 'Original link: /contact-us/, key: 6bfbaa95'
+            label: Link
+            name: 6bfbaa95
+            widget: string
+          - hint: 'Original link: #, key: 23'
+            label: Link
+            name: '23'
+            widget: string
+          - hint: 'Original link: /our-categories/, key: -7983977d'
+            label: Link
+            name: '-7983977d'
+            widget: string
+          - hint: 'Original link: /cats/, key: 55d4b5a3'
+            label: Link
+            name: 55d4b5a3
+            widget: string
+          - hint: 'Original link: /dogs/, key: 55e8f989'
+            label: Link
+            name: 55e8f989
+            widget: string
+          - hint: 'Original link: /blogs/, key: 63a5be2d'
+            label: Link
+            name: 63a5be2d
+            widget: string
+          - hint: 'Original link: /review/, key: 53e730c8'
+            label: Link
+            name: 53e730c8
+            widget: string
+          - hint: 'Original link: https://www.instagram.com/, key: b979dd0'
+            label: Link
+            name: b979dd0
+            widget: string
+          - hint: 'Original link: https://www.facebook.com/, key: 6c4279f0'
+            label: Link
+            name: 6c4279f0
+            widget: string
+          - hint: 'Original link: https://www.youtube.com/, key: -13da2d81'
+            label: Link
+            name: '-13da2d81'
+            widget: string
+          - hint: 'Original link: https://x.com/, key: 629d8613'
+            label: Link
+            name: 629d8613
+            widget: string
+          - hint: 'Original link: https://daspertech.com/, key: 56bd6290'
+            label: Link
+            name: 56bd6290
+            widget: string
+          - hint: 'Original link: /sign-up/, key: 4b0d5213'
+            label: Link
+            name: 4b0d5213
+            widget: string
+          - hint: 'Original link: /#/checkout, key: 5032f721'
+            label: Link
+            name: 5032f721
+            widget: string
+          - hint: >-
+              Original link:
+              https://webflow.com/templates/html/vaseb-furniture-website-template,
+              key: -5f557fac
+            label: Link
+            name: '-5f557fac'
+            widget: string
+          - hint: 'Original link: /log-in/, key: 26a3aa92'
+            label: Link
+            name: 26a3aa92
+            widget: string
+          - hint: 'Original link: /reset-password/, key: -16d8c219'
+            label: Link
+            name: '-16d8c219'
+            widget: string
+          - hint: 'Original link: https://webflow.com/, key: 132c1309'
+            label: Link
+            name: 132c1309
+            widget: string
+          - hint: >-
+              Original link: https://www.fontshare.com/fonts/switzer, key:
+              3336529b
+            label: Link
+            name: 3336529b
+            widget: string
+          - hint: 'Original link: https://unsplash.com/license, key: 503d854'
+            label: Link
+            name: 503d854
+            widget: string
+          - hint: 'Original link: https://www.pexels.com/license/, key: -627f9885'
+            label: Link
+            name: '-627f9885'
+            widget: string
+          - hint: 'Original link: https://www.lummi.ai/terms, key: -f48ff4c'
+            label: Link
+            name: '-f48ff4c'
+            widget: string
+          - hint: >-
+              Original link:
+              https://www.figma.com/community/file/983248991460488027, key:
+              2b2997e3
+            label: Link
+            name: 2b2997e3
+            widget: string
+          - hint: 'Original link: /terms-conditions/, key: -6775931e'
+            label: Link
+            name: '-6775931e'
+            widget: string
+      - label: Images
+        name: images
+        file: cms/_data/images.json
+        fields:
+          - label: Title
+            name: title
+            widget: hidden
+            default: Images
+          - label: Image
+            name: 6d2ccf91
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: i5d25ffb7
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: i7761d626
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 116c14a5
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: i32214f7
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: i251dffb8
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 17d6f94c
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 47153b6c
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: i4255e2fb
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 19292d64
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: '-49ec15a4'
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: '-49c1cf21'
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 1aa78126
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 7331ec9d
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 1c3744e3
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 68f1d281
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: '-10bc2144'
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 96a0bdb
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 611dd774
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: '-1ed23215'
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: '-4ab978f5'
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: '75191e84'
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 6a1217e1
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 2bd5addd
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: '-2317ea6b'
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 134431d7
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 25a2d957
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: '11151607'
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 4a7a775f
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 324e73a7
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: '-67d9187a'
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 782b8d21
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 7839a4a2
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: '-6113305f'
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: '-3aad8888'
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 3f1a1268
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: '-226a8ac'
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 317f733b
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: '-5d25ffb7'
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+      - label: eCommerce
+        name: ecommerce
+        file: cms/_data/settings/ecommerce.json
+        fields:
+          - label: Title
+            name: title
+            widget: hidden
+            default: eCommerce
+          - label: Currencies and Formats
+            name: currencies_and_formats
+            widget: object
+            fields:
+              - hint: >-
+                  Template used to format the price, you can use following
+                  placeholders: {amount}, {currencyCode}, {symbol}
+                name: template
+                label: Price Template
+                widget: string
+                required: true
+              - hint: Character to divide decimals
+                name: decimal
+                label: Decimal
+                widget: string
+                required: true
+              - hint: Character to group amount
+                name: group
+                label: Group
+                widget: string
+                required: true
+              - hint: Number of fraction digits
+                name: fractionDigits
+                label: Fraction Digits
+                widget: number
+                required: true
+                value_type: int
+              - hint: Hide decimals for whole prices
+                name: hideDecimalForWholeNumbers
+                label: Hide decimals
+                widget: boolean
+                required: false
+              - hint: ''
+                name: currencies
+                label: Currencies
+                widget: list
+                required: true
+                min: 1
+                fields:
+                  - hint: Currency Code (3 char) all lowercase
+                    name: currencyCode
+                    label: Currency Code
+                    widget: string
+                    required: true
+                  - hint: ''
+                    name: symbol
+                    label: Symbol
+                    widget: string
+                    required: true
+          - label: Snipcart
+            name: snipcart
+            widget: object
+            fields:
+              - hint: Public Api Key
+                name: apiKey
+                label: Api Key
+                widget: string
+                required: true
+          - label: Snipcart Style
+            name: css
+            widget: object
+            fields:
+              - hint: 'Original Font Family: Open Sans,sans-serif'
+                name: main-font
+                label: Main font
+                widget: string
+                required: true
+              - hint: 'Original Font Family: Montserrat,sans-serif'
+                name: heading-font
+                label: Heading font
+                widget: string
+                required: true
+              - hint: 'Original color: #f7f7f8'
+                name: bgColor-alt
+                label: BgColor alt
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #fff'
+                name: bgColor-badge
+                label: BgColor badge
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #fceae8'
+                name: bgColor-buttonDanger-active
+                label: BgColor buttonDanger active
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #fceae8'
+                name: bgColor-buttonDanger-focus
+                label: BgColor buttonDanger focus
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #fdefed'
+                name: bgColor-buttonDanger-hover
+                label: BgColor buttonDanger hover
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #1a4db3'
+                name: bgColor-buttonPrimary
+                label: BgColor buttonPrimary
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #1a4db3'
+                name: bgColor-buttonPrimary-active
+                label: BgColor buttonPrimary active
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #1a4db3'
+                name: bgColor-buttonPrimary-focus
+                label: BgColor buttonPrimary focus
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #0d59f2'
+                name: bgColor-buttonPrimary-hover
+                label: BgColor buttonPrimary hover
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #e7f6fe'
+                name: bgColor-buttonSecondary-active
+                label: BgColor buttonSecondary active
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #ecf8fe'
+                name: bgColor-buttonSecondary-focus
+                label: BgColor buttonSecondary focus
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #ecf8fe'
+                name: bgColor-buttonSecondary-hover
+                label: BgColor buttonSecondary hover
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #fff'
+                name: bgColor-default
+                label: BgColor default
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #fff'
+                name: bgColor-input
+                label: BgColor input
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #0aa7f5'
+                name: bgColor-input-checked
+                label: BgColor input checked
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #f1f2f4'
+                name: bgColor-input-disabled
+                label: BgColor input disabled
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #fff'
+                name: bgColor-input-focus
+                label: BgColor input focus
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #fff'
+                name: bgColor-input-hover
+                label: BgColor input hover
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: transparent'
+                name: bgColor-link
+                label: BgColor link
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #d9f0fc'
+                name: bgColor-link-focus
+                label: BgColor link focus
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #f1f2f4'
+                name: bgColor-modal
+                label: BgColor modal
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: transparent'
+                name: borderColor-badge
+                label: BorderColor badge
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: transparent'
+                name: borderColor-badge-active
+                label: BorderColor badge active
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #e3e6e8'
+                name: borderColor-badge-disabled
+                label: BorderColor badge disabled
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: transparent'
+                name: borderColor-buttonDanger
+                label: BorderColor buttonDanger
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: currentColor'
+                name: borderColor-buttonDanger-active
+                label: BorderColor buttonDanger active
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: transparent'
+                name: borderColor-buttonDanger-disabled
+                label: BorderColor buttonDanger disabled
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: transparent'
+                name: borderColor-buttonDanger-error
+                label: BorderColor buttonDanger error
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: transparent'
+                name: borderColor-buttonDanger-focus
+                label: BorderColor buttonDanger focus
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: transparent'
+                name: borderColor-buttonDanger-hover
+                label: BorderColor buttonDanger hover
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: transparent'
+                name: borderColor-buttonDanger-success
+                label: BorderColor buttonDanger success
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: transparent'
+                name: borderColor-buttonPrimary
+                label: BorderColor buttonPrimary
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: currentColor'
+                name: borderColor-buttonPrimary-active
+                label: BorderColor buttonPrimary active
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: transparent'
+                name: borderColor-buttonPrimary-disabled
+                label: BorderColor buttonPrimary disabled
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: currentColor'
+                name: borderColor-buttonPrimary-error
+                label: BorderColor buttonPrimary error
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: transparent'
+                name: borderColor-buttonPrimary-focus
+                label: BorderColor buttonPrimary focus
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: transparent'
+                name: borderColor-buttonPrimary-hover
+                label: BorderColor buttonPrimary hover
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: currentColor'
+                name: borderColor-buttonPrimary-success
+                label: BorderColor buttonPrimary success
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: transparent'
+                name: borderColor-buttonSecondary
+                label: BorderColor buttonSecondary
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: currentColor'
+                name: borderColor-buttonSecondary-active
+                label: BorderColor buttonSecondary active
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: transparent'
+                name: borderColor-buttonSecondary-disabled
+                label: BorderColor buttonSecondary disabled
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: transparent'
+                name: borderColor-buttonSecondary-error
+                label: BorderColor buttonSecondary error
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: transparent'
+                name: borderColor-buttonSecondary-focus
+                label: BorderColor buttonSecondary focus
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: transparent'
+                name: borderColor-buttonSecondary-hover
+                label: BorderColor buttonSecondary hover
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: transparent'
+                name: borderColor-buttonSecondary-success
+                label: BorderColor buttonSecondary success
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #e3e6e8'
+                name: borderColor-default
+                label: BorderColor default
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #e3e6e8'
+                name: borderColor-input
+                label: BorderColor input
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #0aa7f5'
+                name: borderColor-input-checked
+                label: BorderColor input checked
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #e3e6e8'
+                name: borderColor-input-disabled
+                label: BorderColor input disabled
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #e85a4a'
+                name: borderColor-input-error
+                label: BorderColor input error
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #0aa7f5'
+                name: borderColor-input-focus
+                label: BorderColor input focus
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #0aa7f5'
+                name: borderColor-input-hover
+                label: BorderColor input hover
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: currentColor'
+                name: borderColor-link
+                label: BorderColor link
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: currentColor'
+                name: borderColor-link-active
+                label: BorderColor link active
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: currentColor'
+                name: borderColor-link-focus
+                label: BorderColor link focus
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: currentColor'
+                name: borderColor-link-hover
+                label: BorderColor link hover
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: currentColor'
+                name: borderColor-success
+                label: BorderColor success
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #8f99a3'
+                name: color-alt
+                label: Color alt
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #0d59f2'
+                name: color-badge
+                label: Color badge
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #0d59f2'
+                name: color-badge-active
+                label: Color badge active
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #2e3338'
+                name: color-badge-disabled
+                label: Color badge disabled
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #9e2215'
+                name: color-buttonDanger
+                label: Color buttonDanger
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #9e2215'
+                name: color-buttonDanger-active
+                label: Color buttonDanger active
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #8f99a3'
+                name: color-buttonDanger-disabled
+                label: Color buttonDanger disabled
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #e85a4a'
+                name: color-buttonDanger-error
+                label: Color buttonDanger error
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #9e2215'
+                name: color-buttonDanger-focus
+                label: Color buttonDanger focus
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #e85a4a'
+                name: color-buttonDanger-hover
+                label: Color buttonDanger hover
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #29c768'
+                name: color-buttonDanger-success
+                label: Color buttonDanger success
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #fff'
+                name: color-buttonPrimary
+                label: Color buttonPrimary
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #fff'
+                name: color-buttonPrimary-active
+                label: Color buttonPrimary active
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #e3e6e8'
+                name: color-buttonPrimary-disabled
+                label: Color buttonPrimary disabled
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #fff'
+                name: color-buttonPrimary-error
+                label: Color buttonPrimary error
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #fff'
+                name: color-buttonPrimary-focus
+                label: Color buttonPrimary focus
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #fff'
+                name: color-buttonPrimary-hover
+                label: Color buttonPrimary hover
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #fff'
+                name: color-buttonPrimary-success
+                label: Color buttonPrimary success
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #133986'
+                name: color-buttonSecondary
+                label: Color buttonSecondary
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #133986'
+                name: color-buttonSecondary-active
+                label: Color buttonSecondary active
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #8f99a3'
+                name: color-buttonSecondary-disabled
+                label: Color buttonSecondary disabled
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #e85a4a'
+                name: color-buttonSecondary-error
+                label: Color buttonSecondary error
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #133986'
+                name: color-buttonSecondary-focus
+                label: Color buttonSecondary focus
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #1a4db3'
+                name: color-buttonSecondary-hover
+                label: Color buttonSecondary hover
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #29c768'
+                name: color-buttonSecondary-success
+                label: Color buttonSecondary success
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #2e3338'
+                name: color-default
+                label: Color default
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #e85a4a'
+                name: color-error
+                label: Color error
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #2e3338'
+                name: color-input
+                label: Color input
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #fff'
+                name: color-input-checked
+                label: Color input checked
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #8f99a3'
+                name: color-input-disabled
+                label: Color input disabled
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #9e2215'
+                name: color-input-error
+                label: Color input error
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #2e3338'
+                name: color-input-focus
+                label: Color input focus
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #2e3338'
+                name: color-input-hover
+                label: Color input hover
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #8f99a3'
+                name: color-inputIcon
+                label: Color inputIcon
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #2e3338'
+                name: color-inputLabel
+                label: Color inputLabel
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #1a4db3'
+                name: color-link
+                label: Color link
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #1a4db3'
+                name: color-link-active
+                label: Color link active
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #1a4db3'
+                name: color-link-focus
+                label: Color link focus
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #0d59f2'
+                name: color-link-hover
+                label: Color link hover
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #29c768'
+                name: color-success
+                label: Color success
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+publish_mode: editorial_workflow
